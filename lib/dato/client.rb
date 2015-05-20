@@ -1,11 +1,9 @@
 require "faraday"
 require "faraday_middleware"
+require "json"
 
 module Dato
   class Client
-    extend Forwardable
-    def_delegators :connection, :get
-
     def initialize(host, domain, token)
       @host, @domain, @token = host, domain, token
     end
@@ -16,6 +14,14 @@ module Dato
 
     def records
       get("records").body
+    end
+
+    def get(*args)
+      connection.get(*args)
+    rescue Faraday::ClientError => e
+      body = JSON.parse(e.response[:body])
+      puts JSON.pretty_generate(body)
+      raise e
     end
 
     def connection

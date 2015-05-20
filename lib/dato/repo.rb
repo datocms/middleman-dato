@@ -53,7 +53,7 @@ module Dato
           .map do |field|
             [
               field[:attributes][:api_key],
-              field[:attributes][:field_type]
+              field[:attributes]
             ]
           end
       ]
