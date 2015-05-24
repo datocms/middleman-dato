@@ -1,13 +1,16 @@
+require "imgix"
+
 module Dato
-  class Image
+  class File
     attr_reader :attributes
 
     def initialize(data)
       @attributes = data.with_indifferent_access
     end
 
-    def url
-      "http://dato-images.herokuapp.com/image/h_150/#{attributes[:path]}"
+    def file
+      @file ||= Imgix::Client.new(host: 'dato-images.imgix.net')
+        .path(attributes[:path])
     end
   end
 end

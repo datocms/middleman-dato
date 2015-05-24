@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("middleman-core", [">= 3.3.12"])
   s.add_runtime_dependency("faraday", [">= 0.9.0"])
   s.add_runtime_dependency("faraday_middleware", [">= 0.9.0"])
+  s.add_runtime_dependency("imgix", [">= 0.3.1"])
 end

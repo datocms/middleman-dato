@@ -7,13 +7,13 @@ module Dato
   class Repo
     include Singleton
 
-    attr_reader :client, :records_per_content_type
+    attr_reader :client, :content_types, :records_per_content_type
 
     def connection_options=(options)
       @client = Client.new(
-        options.fetch(:api_host),
-        options.fetch(:domain),
-        options.fetch(:token)
+        options[:api_host],
+        options[:domain],
+        options[:token]
       )
     end
 
@@ -30,13 +30,13 @@ module Dato
           .map do |content_type|
             [
               content_type[:id],
-              content_type_fields(content_type[:id], data[:included])
+              content_type_data(content_type[:id], data[:included])
             ]
           end
       ]
     end
 
-    def content_type_fields(content_type, data)
+    def content_type_data(content_type, data)
       content_type = data
         .find do |item|
           item[:type] == "content_type" && item[:id] == content_type
@@ -45,7 +45,7 @@ module Dato
       field_ids = content_type[:links][:fields][:linkage]
         .map { |field| field[:id] }
 
-      Hash[
+      fields = Hash[
         data
           .select do |item|
             item[:type] == "field" && field_ids.include?(item[:id])
@@ -57,6 +57,11 @@ module Dato
             ]
           end
       ]
+
+      {
+        singleton: content_type[:attributes][:singleton],
+        fields: fields
+      }
     end
 
     def group_by_content_type(data)
@@ -64,10 +69,14 @@ module Dato
         data
           .with_indifferent_access[:data]
           .group_by do |record|
-            record[:links][:content_type][:linkage][:id].pluralize
+            record[:links][:content_type][:linkage][:id]
           end
           .map do |content_type, records|
-            [ content_type, group_by_id(records) ]
+            if content_types[content_type][:singleton]
+              [ content_type, normalize_record(records.first) ]
+            else
+              [ content_type.pluralize, group_by_id(records) ]
+            end
           end
       ]
     end
@@ -87,7 +96,7 @@ module Dato
 
       Record.new(
         record[:attributes].merge(id: record[:id]),
-        @content_types[content_type]
+        content_types[content_type]
       )
     end
   end

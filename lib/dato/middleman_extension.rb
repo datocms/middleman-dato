@@ -10,7 +10,7 @@ module Dato
 
     attr_reader :records
 
-    def initialize(app, options={}, &block)
+    def initialize(app, options_hash={}, &block)
       super
 
       Repo.instance.connection_options = options
