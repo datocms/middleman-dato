@@ -66,18 +66,19 @@ module Dato
 
     def group_by_content_type(data)
       Hash[
-        data
-          .with_indifferent_access[:data]
-          .group_by do |record|
-            record[:links][:content_type][:linkage][:id]
-          end
-          .map do |content_type, records|
-            if content_types[content_type][:singleton]
-              [ content_type, normalize_record(records.first) ]
-            else
-              [ content_type.pluralize, group_by_id(records) ]
+        content_types.map do |id, content_type|
+          records = data
+            .with_indifferent_access[:data]
+            .select do |record|
+              record[:links][:content_type][:linkage][:id] == id
             end
+
+          if content_type[:singleton]
+            [ id, records.any? ? normalize_record(records.first) : nil ]
+          else
+            [ id.pluralize, group_by_id(records) ]
           end
+        end
       ]
     end
 
