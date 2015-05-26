@@ -29,7 +29,7 @@ module Dato
       end
 
       def title_suffix
-        global_seo_field(:title_suffix)
+        global_seo_field(:title_suffix) || ""
       end
 
       def no_index?
