@@ -7,9 +7,11 @@ module Dato
   class Repo
     include Singleton
 
-    attr_reader :client, :content_types, :records_per_content_type
+    attr_reader :client, :space, :content_types, :records_per_content_type,
+      :connection_options
 
     def connection_options=(options)
+      @connection_options = options
       @client = Client.new(
         options[:api_host],
         options[:domain],
@@ -18,7 +20,9 @@ module Dato
     end
 
     def sync!
-      @content_types = prepare_content_types(client.space)
+      space_response = client.space.with_indifferent_access
+      @space = space_response[:data]
+      @content_types = prepare_content_types(space_response)
       @records_per_content_type = group_by_content_type(client.records)
     end
 

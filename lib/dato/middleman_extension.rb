@@ -1,5 +1,6 @@
 require 'middleman-core'
 require 'dato/repo'
+require 'dato/meta_tags_builder'
 require 'ostruct'
 
 module Dato
@@ -7,6 +8,7 @@ module Dato
     option :domain, nil, 'Space domain'
     option :token, nil, 'Space API token'
     option :api_host, 'http://dato-api.herokuapp.com', 'Space API token'
+    option :base_url, nil, 'Website base URL'
 
     attr_reader :records
 
@@ -37,6 +39,21 @@ module Dato
     helpers do
       def dato
         OpenStruct.new(Repo.instance.records_per_content_type)
+      end
+
+      def dato_meta_tags(record)
+        begin
+          builder = MetaTagsBuilder.new(
+            self,
+            Repo.instance.connection_options[:base_url],
+            Repo.instance.space,
+            record
+          )
+          builder.meta_tags
+        rescue Exception => e
+          puts e.message
+          puts e.backtrace.join("\n")
+        end
       end
     end
   end
