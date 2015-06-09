@@ -2,8 +2,9 @@ require 'spec_helper'
 
 module Dato::MetaTags
   RSpec.describe ArticleModifiedTime do
-    subject(:meta_tag) { described_class.new(builder, space, record) }
+    subject(:meta_tag) { described_class.new(builder, base_url, space, record) }
     let(:builder) { MockBuilder.new }
+    let(:base_url) { nil }
     let(:space) { nil }
     let(:record) do
       double("Record", updated_at: Time.now, singleton?: false)
@@ -18,4 +19,3 @@ module Dato::MetaTags
     end
   end
 end
-
