@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'active_support/dependencies'
 
 require 'i18n'

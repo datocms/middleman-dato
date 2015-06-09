@@ -3,3 +3,6 @@
 
 # Ignore pkg folder
 /pkg
+
+# Ignore coverage report
+/coverage
