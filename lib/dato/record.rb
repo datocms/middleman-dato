@@ -1,6 +1,5 @@
-require "dato/file"
-require "dato/seo"
-require "time"
+require 'active_support/core_ext/hash/indifferent_access'
+require 'dato/field'
 
 module Dato
   class Record
@@ -24,28 +23,6 @@ module Dato
       end
     end
 
-    def read_attribute(name)
-      attribute = @attributes[name]
-
-      attribute = if fields[name][:localized]
-        attribute[I18n.locale]
-      else
-        attribute
-      end
-
-      return nil if !attribute
-
-      if %w(image file).include? fields[name][:field_type]
-        Dato::File.new(attribute)
-      elsif fields[name][:field_type] == "date"
-        Date.parse(attribute)
-      elsif fields[name][:field_type] == "seo"
-        Dato::Seo.new(attribute)
-      else
-        attribute
-      end
-    end
-
     def id
       @attributes[:id]
     end
@@ -60,6 +37,12 @@ module Dato
       else
         super
       end
+    end
+
+    private
+
+    def read_attribute(name)
+      Field.value(attributes[name], fields[name])
     end
   end
 end

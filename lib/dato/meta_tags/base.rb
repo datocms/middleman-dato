@@ -1,5 +1,5 @@
 require 'forwardable'
-require 'dato/seo'
+require 'dato/fields/seo'
 
 module Dato
   module MetaTags
@@ -58,7 +58,7 @@ module Dato
       def fallback_seo
         @fallback_seo ||= begin
           if global_seo
-            Seo.new(global_seo[:fallback_seo])
+            Fields::Seo.new(global_seo[:fallback_seo])
           end
         end
       end
