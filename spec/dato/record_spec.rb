@@ -64,7 +64,7 @@ RSpec.describe Dato::Record do
     let(:attributes) { { foo: 'bar' } }
 
     before do
-      allow(Dato::Field).to receive(:value)
+      allow(Dato::Field).to receive(:value).and_return("bar")
     end
 
     context 'if the requested method matches one attribute' do
@@ -72,6 +72,12 @@ RSpec.describe Dato::Record do
 
       it 'calls the ".value" method of "Field" class' do
         expect(Dato::Field).to have_received(:value).with(attributes[:foo], content_type[:fields][:foo])
+      end
+    end
+
+    context 'if the same attribute is requested multiple times' do
+      it 'returns the same object' do
+        expect(record.foo.object_id).to eq(record.foo.object_id)
       end
     end
   end

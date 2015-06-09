@@ -9,6 +9,7 @@ module Dato
       @attributes = attributes.with_indifferent_access
       @content_type = content_type
       @fields = content_type[:fields].with_indifferent_access
+      @values = {}
     end
 
     def singleton?
@@ -42,7 +43,10 @@ module Dato
     private
 
     def read_attribute(name)
-      Field.value(attributes[name], fields[name])
+      unless @values.has_key?(name)
+        @values[name] = Field.value(attributes[name], fields[name])
+      end
+      @values[name]
     end
   end
 end
