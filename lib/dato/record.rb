@@ -1,8 +1,17 @@
 require 'active_support/core_ext/hash/indifferent_access'
 require 'dato/field'
 
+module Slugify
+  refine String do
+    def to_slug
+      downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+    end
+  end
+end
+
 module Dato
   class Record
+    using Slugify
     attr_reader :attributes, :fields, :content_type
 
     def initialize(attributes, content_type)
@@ -38,6 +47,16 @@ module Dato
       else
         super
       end
+    end
+
+    def slug
+      field_name = content_type[:fields].select do |name, data|
+        data[:field_type] == 'title'
+      end.shift.first
+
+      "#{id}-#{send(field_name).to_slug}"
+    rescue NoMethodError # there is no title
+      return nil
     end
 
     def ==(other)

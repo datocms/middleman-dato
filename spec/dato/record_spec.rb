@@ -59,6 +59,26 @@ RSpec.describe Dato::Record do
     end
   end
 
+  describe '#slug' do
+    let(:attributes) { { id: 1, title: 'Foo Bar' } }
+
+    context 'if there is a "title" field' do
+      let(:content_type) { { fields: { title: { field_type: 'title' } } } }
+
+      it 'retuns the slug of the record' do
+        expect(record.slug).to eq('1-foo-bar')
+      end
+    end
+
+    context 'else' do
+      let(:content_type) { { fields: { title: { field_type: 'text' } } } }
+
+      it 'returns nil' do
+        expect(record.slug).to be_nil
+      end
+    end
+  end
+
   describe '#method_missing' do
     let(:content_type) { { fields: { foo: { field_type: 'text' } } } }
     let(:attributes) { { foo: 'bar' } }
