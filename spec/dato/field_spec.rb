@@ -34,11 +34,69 @@ RSpec.describe Dato::Field do
     end
 
     describe 'field types' do
+      let(:client) { double('Client') }
+
+      before do
+        allow(Dato::Client).to receive(:new).and_return(client)
+        allow(client).to receive(:records).and_return({
+                                                        data: [
+                                                          {
+                                                            id: 1,
+                                                            attributes: {},
+                                                            links: {
+                                                              content_type: {
+                                                                linkage: {
+                                                                  id: 'foo',
+                                                                  type: "content_type"
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        ]
+                                                      })
+        allow(client).to receive(:space).and_return({
+                                                      data: {
+                                                        links: {
+                                                          content_types: {
+                                                            linkage: [
+                                                              {
+                                                                id: "foo",
+                                                                type: "content_type"
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      },
+                                                      included: [
+                                                        {
+                                                          attributes: {
+                                                            name: "foo",
+                                                            singleton: false
+                                                          },
+                                                          id: "foo",
+                                                          links: {
+                                                            fields: {
+                                                              linkage: []
+                                                            },
+                                                            singleton_record: {
+                                                              linkage: nil
+                                                            }
+                                                          },
+                                                          type: "content_type"
+                                                        }
+                                                      ]
+                                                    })
+
+        Dato::Repo.instance.connection_options = {}
+        Dato::Repo.instance.sync!
+      end
+
       [
-        { type: 'image', value: {},           result: Dato::Fields::File.new({}) },
-        { type: 'file',  value: {},           result: Dato::Fields::File.new({}) },
-        { type: 'date',  value: '2015-06-09', result: Date.new(2015, 6, 9) },
-        { type: 'seo',   value: {},           result: Dato::Fields::Seo.new({})    }
+        { type: 'image',      value: {},           result: Dato::Fields::File.new({}) },
+        { type: 'file',       value: {},           result: Dato::Fields::File.new({}) },
+        { type: 'date',       value: '2015-06-09', result: Date.new(2015, 6, 9) },
+        { type: 'seo',        value: {},           result: Dato::Fields::Seo.new({}) },
+        { type: 'belongs_to', value: 1,            result: Dato::Record.new({id: 1}, { fields: {} })}
       ].each do |data|
         context "if the field has '#{data[:type]}' type" do
           let(:attribute) { data[:value] }

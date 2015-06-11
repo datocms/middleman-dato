@@ -1,4 +1,5 @@
 require 'active_support/core_ext/hash/indifferent_access'
+require 'dato/repo'
 require "dato/fields/file"
 require "dato/fields/seo"
 require "time"
@@ -10,6 +11,7 @@ module Dato
       file:  Dato::Fields::File.method(:new),
       date:  Date.method(:parse),
       seo:   Dato::Fields::Seo.method(:new),
+      belongs_to: Dato::Repo.instance.method(:find),
     }
 
     class << self

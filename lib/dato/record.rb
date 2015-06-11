@@ -40,6 +40,10 @@ module Dato
       end
     end
 
+    def ==(other)
+      id == other.id
+    end
+
     private
 
     def read_attribute(name)

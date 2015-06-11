@@ -68,6 +68,11 @@ module Dato
       }
     end
 
+    def find(id)
+      record = client.records[:data].find { |r| r[:id] == id }
+      normalize_record(record) unless record.nil?
+    end
+
     def group_by_content_type(data)
       Hash[
         content_types.map do |id, content_type|
@@ -98,7 +103,6 @@ module Dato
 
     def normalize_record(record)
       content_type = record[:links][:content_type][:linkage][:id]
-
       Record.new(
         record[:attributes].merge(id: record[:id]),
         content_types[content_type]
