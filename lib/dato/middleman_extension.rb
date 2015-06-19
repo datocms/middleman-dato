@@ -1,18 +1,18 @@
-require 'middleman-core'
-require 'dato/repo'
-require 'dato/meta_tags_builder'
-require 'ostruct'
+require "middleman-core"
+require "dato/repo"
+require "dato/meta_tags_builder"
+require "ostruct"
 
 module Dato
   class MiddlemanExtension < ::Middleman::Extension
-    option :domain, nil, 'Space domain'
-    option :token, nil, 'Space API token'
-    option :api_host, 'http://dato-api.herokuapp.com', 'Space API token'
-    option :base_url, nil, 'Website base URL'
+    option :domain, nil, "Space domain"
+    option :token, nil, "Space API token"
+    option :api_host, "http://dato-api.herokuapp.com", "Space API token"
+    option :base_url, nil, "Website base URL"
 
     attr_reader :records
 
-    def initialize(app, options_hash={}, &block)
+    def initialize(app, options_hash = {}, &block)
       super
 
       Repo.instance.connection_options = options
@@ -42,18 +42,16 @@ module Dato
       end
 
       def dato_meta_tags(record)
-        begin
-          builder = MetaTagsBuilder.new(
-            self,
-            Repo.instance.connection_options[:base_url],
-            Repo.instance.space,
-            record
-          )
-          builder.meta_tags
-        rescue Exception => e
-          puts e.message
-          puts e.backtrace.join("\n")
-        end
+        builder = MetaTagsBuilder.new(
+          self,
+          Repo.instance.connection_options[:base_url],
+          Repo.instance.space,
+          record
+        )
+        builder.meta_tags
+      rescue Exception => e
+        puts e.message
+        puts e.backtrace.join("\n")
       end
     end
   end

@@ -1,9 +1,8 @@
-require 'dato/meta_tags/base'
+require "dato/meta_tags/base"
 
 module Dato
   module MetaTags
     class Url < Base
-
       def build
         if url.present?
           [
@@ -20,5 +19,3 @@ module Dato
     end
   end
 end
-
-

@@ -10,8 +10,8 @@ module Dato
       end
 
       def file
-        @file ||= Imgix::Client.new(host: 'dato-images.imgix.net')
-                .path(attributes[:path])
+        @file ||= Imgix::Client.new(host: "dato-images.imgix.net").
+                  path(attributes[:path])
       end
 
       def ==(other)

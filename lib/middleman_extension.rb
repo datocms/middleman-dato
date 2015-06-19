@@ -1,1 +1,1 @@
-require 'middleman-dato'
+require "middleman-dato"

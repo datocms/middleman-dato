@@ -1,9 +1,8 @@
-require 'dato/meta_tags/base'
+require "dato/meta_tags/base"
 
 module Dato
   module MetaTags
     class Image < Base
-
       def build
         if image.present?
           [
@@ -17,9 +16,9 @@ module Dato
         image = seo_field_with_fallback(
           :image,
           first_record_field_of_type(:image)
-        ) do |image|
-          image.attributes[:width] >= 200 &&
-          image.attributes[:height] >= 200
+        ) do |i|
+          i.attributes[:width] >= 200 &&
+          i.attributes[:height] >= 200
         end
 
         if image
@@ -29,5 +28,3 @@ module Dato
     end
   end
 end
-
-

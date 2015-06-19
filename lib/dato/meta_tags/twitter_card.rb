@@ -1,4 +1,4 @@
-require 'dato/meta_tags/twitter_meta_tag'
+require "dato/meta_tags/twitter_meta_tag"
 
 module Dato
   module MetaTags

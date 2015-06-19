@@ -1,9 +1,9 @@
-require 'simplecov'
+require "simplecov"
 SimpleCov.start
 
-require 'active_support/dependencies'
+require "active_support/dependencies"
 
-require 'i18n'
+require "i18n"
 
 I18n.available_locales = [:it, :en]
 

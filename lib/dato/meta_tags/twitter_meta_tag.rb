@@ -1,4 +1,4 @@
-require 'dato/meta_tags/base'
+require "dato/meta_tags/base"
 
 module Dato
   module MetaTags
@@ -23,4 +23,3 @@ module Dato
     end
   end
 end
-

@@ -5,7 +5,9 @@ require "json"
 module Dato
   class Client
     def initialize(host, domain, token)
-      @host, @domain, @token = host, domain, token
+      @host = host
+      @domain = domain
+      @token = token
     end
 
     def space
@@ -28,10 +30,10 @@ module Dato
       options = {
         url: @host,
         headers: {
-          "Content-Type"   => "application/json",
-          "Accept"         => "application/json",
+          "Content-Type" => "application/json",
+          "Accept" => "application/json",
           "X-Space-Domain" => @domain,
-          "Authorization"  => "Api-Key #{@token}"
+          "Authorization" => "Api-Key #{@token}"
         }
       }
       @connection ||= Faraday.new(options) do |c|

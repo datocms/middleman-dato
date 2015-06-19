@@ -5,7 +5,8 @@ module Dato
 
       def initialize(data)
         @record_id = data
-        @content_type = field.with_indifferent_access[:record_content_type][:content_type]
+        field = field.with_indifferent_access
+        @content_type = field[:record_content_type][:content_type]
       end
 
       def value

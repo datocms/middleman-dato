@@ -1,5 +1,5 @@
-require 'forwardable'
-require 'dato/fields/seo'
+require "forwardable"
+require "dato/fields/seo"
 
 module Dato
   module MetaTags
@@ -45,8 +45,8 @@ module Dato
       def first_record_field_of_type(type)
         return nil unless record
 
-        field = record.fields.find do |name, field|
-          field[:field_type] == type.to_s
+        field = record.fields.detect do |_name, f|
+          f[:field_type] == type.to_s
         end
 
         if field

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Dato::MetaTags
   RSpec.describe OgLocale do
@@ -8,7 +8,7 @@ module Dato::MetaTags
     let(:space) { nil }
     let(:record) { nil }
 
-    describe '.value' do
+    describe ".value" do
       it "returns the current locale" do
         I18n.with_locale(:it) do
           expect(meta_tag.value).to eq "it_IT"

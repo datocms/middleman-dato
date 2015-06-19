@@ -1,9 +1,8 @@
-require 'dato/meta_tags/base'
+require "dato/meta_tags/base"
 
 module Dato
   module MetaTags
     class Title < Base
-
       def build
         if title.present?
           [
@@ -33,5 +32,3 @@ module Dato
     end
   end
 end
-
-
