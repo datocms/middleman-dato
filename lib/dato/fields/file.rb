@@ -10,7 +10,7 @@ module Dato
       end
 
       def file
-        @file ||= Imgix::Client.new(host: "dato-images.imgix.net").
+        @file ||= Imgix::Client.new(host: "dato-images.imgix.net", secure: true).
                   path(attributes[:path])
       end
 
