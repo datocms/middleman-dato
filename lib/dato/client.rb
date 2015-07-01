@@ -15,7 +15,7 @@ module Dato
     end
 
     def records
-      get("records").body
+      get("records", "page[limit]" => 10_000).body
     end
 
     def get(*args)
