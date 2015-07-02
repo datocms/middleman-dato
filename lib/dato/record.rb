@@ -67,10 +67,7 @@ module Dato
     private
 
     def read_attribute(name)
-      unless @values.has_key?(name)
-        @values[name] = Field.value(attributes[name], fields[name])
-      end
-      @values[name]
+      Field.value(attributes[name], fields[name])
     end
   end
 end
