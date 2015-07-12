@@ -19,7 +19,7 @@ module Dato
       Repo.instance.sync!
 
       app.before do
-        unless build?
+        if !build? && !ENV.fetch("DISABLE_DATO_REFRESH", false)
           print "Syncing Dato space... "
           Repo.instance.sync!
           puts "done."
