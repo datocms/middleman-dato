@@ -61,7 +61,11 @@ module Dato
     end
 
     def ==(other)
-      id == other.id
+      if other.is_a? Record
+        id == other.id
+      else
+        false
+      end
     end
 
     private
