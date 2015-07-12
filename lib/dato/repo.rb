@@ -60,6 +60,7 @@ module Dato
       ]
 
       {
+        api_key: content_type[:id],
         singleton: content_type[:attributes][:singleton],
         fields: fields
       }
