@@ -72,7 +72,7 @@ module Dato
     end
 
     def find_all(ids)
-      ids.map { |id| find(id) }
+      Array(ids).map { |id| find(id) }
     end
 
     def group_by_content_type(data)
