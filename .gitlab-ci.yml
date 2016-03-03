@@ -1,0 +1,7 @@
+build:
+  script:
+    - source ~/.bashrc
+    - rbenv global 2.2.3
+    - gem install bundler --conservative
+    - bundle install --quiet --path /cache
+    - bundle exec rake
