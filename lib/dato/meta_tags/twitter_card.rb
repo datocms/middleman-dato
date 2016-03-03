@@ -1,4 +1,4 @@
-require "dato/meta_tags/twitter_meta_tag"
+require 'dato/meta_tags/twitter_meta_tag'
 
 module Dato
   module MetaTags
@@ -8,11 +8,11 @@ module Dato
       end
 
       def name
-        "twitter:card"
+        'twitter:card'
       end
 
       def value
-        "summary"
+        'summary'
       end
     end
   end

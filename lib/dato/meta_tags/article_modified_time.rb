@@ -1,5 +1,5 @@
-require "dato/meta_tags/og_meta_tag"
-require "time"
+require 'dato/meta_tags/og_meta_tag'
+require 'time'
 
 module Dato
   module MetaTags
@@ -9,7 +9,7 @@ module Dato
       end
 
       def name
-        "article:modified_time"
+        'article:modified_time'
       end
 
       def value

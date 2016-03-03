@@ -1,6 +1,7 @@
-require "faraday"
-require "faraday_middleware"
-require "json"
+require 'faraday'
+require 'faraday_middleware'
+require 'json'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module Dato
   class Client
@@ -11,11 +12,11 @@ module Dato
     end
 
     def space
-      get("space").body
+      get('space').body.with_indifferent_access
     end
 
     def records
-      get("records", "page[limit]" => 10_000).body
+      get('records', 'page[limit]' => 10_000).body.with_indifferent_access
     end
 
     def get(*args)
@@ -30,10 +31,10 @@ module Dato
       options = {
         url: @host,
         headers: {
-          "Content-Type" => "application/json",
-          "Accept" => "application/json",
-          "X-Space-Domain" => @domain,
-          "Authorization" => "Api-Key #{@token}"
+          'Content-Type' => 'application/json',
+          'Accept' => 'application/json',
+          'X-Space-Domain' => @domain,
+          'Authorization' => "Api-Key #{@token}"
         }
       }
       @connection ||= Faraday.new(options) do |c|

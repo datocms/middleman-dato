@@ -1,15 +1,15 @@
-require "dato/meta_tags/title"
-require "dato/meta_tags/description"
-require "dato/meta_tags/image"
-require "dato/meta_tags/url"
-require "dato/meta_tags/robots"
-require "dato/meta_tags/og_locale"
-require "dato/meta_tags/og_type"
-require "dato/meta_tags/og_site_name"
-require "dato/meta_tags/article_modified_time"
-require "dato/meta_tags/article_publisher"
-require "dato/meta_tags/twitter_card"
-require "dato/meta_tags/twitter_site"
+require 'dato/meta_tags/title'
+require 'dato/meta_tags/description'
+require 'dato/meta_tags/image'
+require 'dato/meta_tags/url'
+require 'dato/meta_tags/robots'
+require 'dato/meta_tags/og_locale'
+require 'dato/meta_tags/og_type'
+require 'dato/meta_tags/og_site_name'
+require 'dato/meta_tags/article_modified_time'
+require 'dato/meta_tags/article_publisher'
+require 'dato/meta_tags/twitter_card'
+require 'dato/meta_tags/twitter_site'
 
 module Dato
   class MetaTagsBuilder
@@ -26,7 +26,7 @@ module Dato
       MetaTags::ArticlePublisher,
       MetaTags::TwitterCard,
       MetaTags::TwitterSite
-    ]
+    ].freeze
 
     def initialize(*args)
       @args = args

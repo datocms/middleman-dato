@@ -1,4 +1,4 @@
-require "dato/meta_tags/base"
+require 'dato/meta_tags/base'
 
 module Dato
   module MetaTags
@@ -8,9 +8,7 @@ module Dato
       end
 
       def build
-        if buildable?
-          builder.tag(:meta, name: name, content: value)
-        end
+        builder.tag(:meta, name: name, content: value) if buildable?
       end
 
       def name

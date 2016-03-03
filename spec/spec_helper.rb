@@ -1,18 +1,19 @@
-require "simplecov"
-SimpleCov.start
+require 'simplecov'
+require 'active_support/dependencies'
+require 'i18n'
 
-require "active_support/dependencies"
+SimpleCov.start do
+  add_filter '/spec/'
+end
 
-require "i18n"
-
-I18n.available_locales = [:it, :en]
+I18n.available_locales = [:it, :en, :ru]
 
 ActiveSupport::Dependencies.autoload_paths.unshift(
-  File.join(__dir__, "../lib")
+  File.join(__dir__, '../lib')
 )
 
-Dir["spec/support/**/*.rb"].each do |f|
-  require_relative "../" + f
+Dir['spec/support/**/*.rb'].each do |f|
+  require_relative '../' + f
 end
 
 RSpec.configure do |config|
@@ -24,11 +25,12 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
   config.disable_monkey_patching!
+  config.warnings = false
 
+  config.default_formatter = 'doc' if config.files_to_run.one?
+
+  config.profile_examples = 10
   config.order = :random
-
   Kernel.srand config.seed
 end

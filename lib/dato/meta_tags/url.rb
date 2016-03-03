@@ -1,4 +1,4 @@
-require "dato/meta_tags/base"
+require 'dato/meta_tags/base'
 
 module Dato
   module MetaTags
@@ -6,9 +6,9 @@ module Dato
       def build
         if url.present?
           [
-            builder.tag(:link, rel: "canonical", href: url),
-            builder.tag(:meta, property: "og:url", content: url),
-            builder.tag(:meta, name: "twitter:url", content: url)
+            builder.tag(:link, rel: 'canonical', href: url),
+            builder.tag(:meta, property: 'og:url', content: url),
+            builder.tag(:meta, name: 'twitter:url', content: url)
           ]
         end
       end

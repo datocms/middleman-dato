@@ -1,3 +1,3 @@
-require "dato/middleman_extension"
+require 'dato/middleman_extension'
 
 Dato::MiddlemanExtension.register(:dato)

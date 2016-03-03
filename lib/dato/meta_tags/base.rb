@@ -1,5 +1,5 @@
-require "forwardable"
-require "dato/fields/seo"
+require 'forwardable'
+require 'dato/field_type/seo'
 
 module Dato
   module MetaTags
@@ -29,45 +29,38 @@ module Dato
       end
 
       def title_suffix
-        global_seo_field(:title_suffix) || ""
+        global_seo_field(:title_suffix) || ''
       end
 
       def no_index?
-        space && space[:attributes][:no_index]
+        space && space.no_index
       end
 
       def global_seo_field(attribute)
-        if global_seo
-          global_seo[attribute]
-        end
+        global_seo[attribute] if global_seo
       end
 
       def first_record_field_of_type(type)
         return nil unless record
 
-        field = record.fields.detect do |_name, f|
-          f[:field_type] == type.to_s
+        field = record.fields.detect do |f|
+          f.field_type == type.to_s
         end
 
-        if field
-          field_name = field.first
-          record.send(field_name)
-        end
+        record.send(field.api_key) if field
       end
 
       def fallback_seo
         @fallback_seo ||= begin
-          if global_seo
-            Fields::Seo.new(global_seo[:fallback_seo])
-          end
+          FieldType::Seo.parse(global_seo[:fallback_seo], nil) if global_seo
         end
       end
 
       def global_seo
         @global_seo ||= begin
-          if space && space[:attributes][:global_seo]
-            global_seo = space[:attributes][:global_seo]
-            if space[:attributes][:locales].size > 1
+          if space && space.global_seo
+            global_seo = space.global_seo
+            if space.locales.size > 1
               global_seo[I18n.locale]
             else
               global_seo

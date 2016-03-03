@@ -1,77 +1,108 @@
-require "active_support/core_ext/hash/indifferent_access"
-require "dato/field"
+require 'forwardable'
+require 'active_support/inflector/transliterate'
 
-module Slugify
-  refine String do
-    def to_slug
-      downcase.strip.gsub(" ", "-").gsub(/[^\w-]/, "")
-    end
-  end
+Dir[File.dirname(__FILE__) + '/field_type/*.rb'].each do |file|
+  require file
 end
 
 module Dato
   class Record
-    using Slugify
-    attr_reader :attributes, :fields, :content_type
+    extend Forwardable
 
-    def initialize(attributes, content_type)
-      @attributes = attributes.with_indifferent_access
-      @content_type = content_type
-      @fields = content_type[:fields].with_indifferent_access
-      @values = {}
+    attr_reader :entity
+    def_delegators :entity, :id, :type
+
+    def initialize(entity, records_repo)
+      @entity = entity
+      @records_repo = records_repo
+    end
+
+    def slug
+      if singleton?
+        content_type.api_key.humanize.parameterize
+      elsif title_attribute
+        "#{id}-#{send(title_attribute).parameterize}"
+      else
+        id.to_s
+      end
     end
 
     def singleton?
-      @singleton = content_type[:singleton]
+      content_type.singleton
+    end
+
+    def content_type
+      entity.content_type
+    end
+
+    def fields
+      content_type.fields.sort_by(&:position)
+    end
+
+    def attributes
+      fields.each_with_object({}) do |field, acc|
+        acc[field.api_key.to_sym] = send(field.api_key)
+      end
+    end
+
+    def position
+      entity.position
+    end
+
+    def updated_at
+      Time.parse(entity.updated_at)
+    end
+
+    def to_s
+      api_key = content_type.api_key
+      "#<Record id=#{id} content_type=#{api_key} attributes=#{attributes}>"
+    end
+    alias inspect to_s
+
+    def title_attribute
+      title_field = fields.find do |field|
+        field.field_type == 'string' &&
+          field.appeareance[:type] == 'title'
+      end
+      title_field && title_field.api_key
     end
 
     def respond_to?(method, include_private = false)
-      if @attributes.has_key?(method)
+      field = fields.find { |f| f.api_key.to_sym == method }
+      if field
         true
       else
         super
       end
     end
 
-    def id
-      @attributes[:id]
-    end
+    private
 
-    def updated_at
-      Time.parse(@attributes[:updated_at])
+    def read_attribute(method, field)
+      field_type = field.field_type
+      type_klass_name = "::Dato::FieldType::#{field_type.camelize}"
+      type_klass = type_klass_name.safe_constantize
+
+      if type_klass
+        value = if field.localized
+                  (entity.send(method) || {})[I18n.locale]
+                else
+                  entity.send(method)
+                end
+
+        value && type_klass.parse(value, @records_repo)
+      else
+        raise "Cannot convert field `#{method}` of type `#{field_type}`"
+      end
     end
 
     def method_missing(method, *arguments, &block)
-      if @attributes.has_key?(method) && arguments.size == 0
-        read_attribute(method.to_sym)
+      field = fields.find { |f| f.api_key.to_sym == method }
+      if field && arguments.empty?
+        read_attribute(method, field)
       else
         super
       end
-    end
-
-    def slug
-      field_name = content_type[:fields].select do |_name, data|
-        data[:field_type] == "title"
-      end.shift.first
-
-      "#{id}-#{send(field_name).to_slug}"
-    rescue NoMethodError
-      # there is no title
-      return nil
-    end
-
-    def ==(other)
-      if other.is_a? Record
-        id == other.id
-      else
-        false
-      end
-    end
-
-    private
-
-    def read_attribute(name)
-      Field.value(attributes[name], fields[name])
     end
   end
 end

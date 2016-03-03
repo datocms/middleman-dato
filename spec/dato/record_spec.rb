@@ -1,103 +1,162 @@
-require "spec_helper"
+module Dato
+  RSpec.describe Record do
+    subject(:record) { described_class.new(entity, repo) }
+    let(:entity) do
+      double(
+        'Dato::JsonApiEntity(Record)',
+        id: '14',
+        content_type: content_type,
+        title: "My titlè with àccents",
+        body: 'Hi there',
+        position: 2,
+        updated_at: '2010-01-01T00:00'
+      )
+    end
+    let(:repo) do
+      instance_double('Dato::RecordsRepo')
+    end
+    let(:content_type) do
+      double(
+        'Dato::JsonApiEntity(Content Type)',
+        singleton: is_singleton,
+        api_key: 'work_item',
+        fields: fields
+      )
+    end
+    let(:is_singleton) { false }
+    let(:fields) do
+      [
+        double(
+          'Dato::JsonApiEntity(Field)',
+          position: 1,
+          api_key: 'title',
+          localized: false,
+          field_type: 'string',
+          appeareance: { type: 'title' }
+        ),
+        double(
+          'Dato::JsonApiEntity(Field)',
+          position: 1,
+          api_key: 'body',
+          localized: false,
+          field_type: 'text',
+          appeareance: { type: 'plain' }
+        )
+      ]
+    end
 
-RSpec.describe Dato::Record do
-  subject(:record) { described_class.new(attributes, content_type) }
-  let(:attributes) { {} }
-  let(:content_type) { { fields: {} } }
+    describe '#slug' do
+      context 'singleton' do
+        let(:is_singleton) { true }
 
-  it "gets attributes and content type as constructor parameters" do
-    record
-  end
+        it 'returns the parameterized content type api key' do
+          expect(record.slug).to eq 'work-item'
+        end
+      end
 
-  describe "#singleton?" do
-    context "if the record is a singleton" do
-      let(:content_type) { { fields: {}, singleton: true } }
+      context 'non singleton, no title field' do
+        let(:fields) { [] }
 
-      it "returns true" do
-        expect(record.singleton?).to eq(true)
+        it 'returns the ID' do
+          expect(record.slug).to eq '14'
+        end
+      end
+
+      context 'non singleton, title field' do
+        it 'returns the ID + title' do
+          expect(record.slug).to eq '14-my-title-with-accents'
+        end
       end
     end
 
-    context "else" do
-      let(:content_type) { { fields: {}, singleton: false } }
-
-      it "returns false" do
-        expect(record.singleton?).to eq(false)
-      end
-    end
-  end
-
-  describe "#respond_to?" do
-    let(:attributes) { { foo: "bar" } }
-
-    context "if the record contains the requested field" do
-      it "returns true" do
-        expect(record.respond_to?(:foo)).to eq(true)
+    describe '#attributes' do
+      it 'returns an hash of the field values' do
+        expected_attributes = { title: "My titlè with àccents", body: 'Hi there' }
+        expect(record.attributes).to eq expected_attributes
       end
     end
 
-    context "else" do
-      it "returns true" do
-        expect(record.respond_to?(:bar)).to eq(false)
-      end
-    end
-  end
-
-  describe "#id" do
-    let(:attributes) { { id: 123 } }
-
-    it "returns the id of the record" do
-      expect(record.id).to eq(123)
-    end
-  end
-
-  describe "#updated_at" do
-    let(:attributes) { { updated_at: "2015-06-09T12:47" } }
-
-    it "parses the field and returns a Time object" do
-      expect(record.updated_at).to eq(Time.new(2015, 6, 9, 12, 47))
-    end
-  end
-
-  describe "#slug" do
-    let(:attributes) { { id: 1, title: "Foo Bar" } }
-
-    context 'if there is a "title" field' do
-      let(:content_type) { { fields: { title: { field_type: "title" } } } }
-
-      it "retuns the slug of the record" do
-        expect(record.slug).to eq("1-foo-bar")
+    describe 'position' do
+      it 'returns the entity position field' do
+        expect(record.position).to eq 2
       end
     end
 
-    context "else" do
-      let(:content_type) { { fields: { title: { field_type: "text" } } } }
-
-      it "returns nil" do
-        expect(record.slug).to be_nil
-      end
-    end
-  end
-
-  describe "#method_missing" do
-    let(:content_type) { { fields: { foo: { field_type: "text" } } } }
-    let(:attributes) { { foo: "bar" } }
-
-    before do
-      allow(Dato::Field).to receive(:value).and_return("bar")
-    end
-
-    context "if the requested method matches one attribute" do
-      before { record.foo }
-
-      it 'calls the ".value" method of "Field" class' do
-        expect(Dato::Field).to have_received(:value).with(attributes[:foo], content_type[:fields][:foo])
+    describe 'updated_at' do
+      it 'returns the entity updated_at field' do
+        expect(record.updated_at).to be_a Time
       end
     end
 
-    context "if the same attribute is requested multiple times" do
-      it "returns the same object" do
-        expect(record.foo.object_id).to eq(record.foo.object_id)
+    describe 'dynamic methods' do
+      context 'existing field' do
+        it 'returns the field value' do
+          expect(record.respond_to?(:body)).to be_truthy
+          expect(record.body).to eq 'Hi there'
+        end
+
+        context 'localized field' do
+          let(:entity) do
+            double(
+              'Dato::JsonApiEntity(Record)',
+              id: '14',
+              content_type: content_type,
+              title: { it: 'Foo', en: 'Bar' }
+            )
+          end
+
+          let(:fields) do
+            [
+              double(
+                'Dato::JsonApiEntity(Field)',
+                position: 1,
+                api_key: 'title',
+                localized: true,
+                field_type: 'string',
+                appeareance: { type: 'plain' }
+              )
+            ]
+          end
+
+          it 'returns the value for the current locale' do
+            I18n.with_locale(:it) do
+              expect(record.title).to eq 'Foo'
+            end
+          end
+
+          context 'non existing value' do
+            it 'raises nil' do
+              I18n.with_locale(:ru) do
+                expect(record.title).to eq nil
+              end
+            end
+          end
+        end
+      end
+
+      context 'non existing field' do
+        it 'raises NoMethodError' do
+          expect(record.respond_to?(:qux)).to be_falsy
+          expect { record.qux }.to raise_error NoMethodError
+        end
+      end
+
+      context 'non existing field type' do
+        let(:fields) do
+          [
+            double(
+              'Dato::JsonApiEntity(Field)',
+              position: 1,
+              api_key: 'title',
+              localized: true,
+              field_type: 'rotfl'
+            )
+          ]
+        end
+
+        it 'raises RuntimeError' do
+          expect { record.title }.to raise_error RuntimeError
+        end
       end
     end
   end

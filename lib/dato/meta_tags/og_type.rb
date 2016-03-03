@@ -1,4 +1,4 @@
-require "dato/meta_tags/og_meta_tag"
+require 'dato/meta_tags/og_meta_tag'
 
 module Dato
   module MetaTags
@@ -8,16 +8,16 @@ module Dato
       end
 
       def name
-        "og:type"
+        'og:type'
       end
 
       def value
         if !record
-          "website"
+          'website'
         elsif record.singleton?
-          "website"
+          'website'
         else
-          "article"
+          'article'
         end
       end
     end

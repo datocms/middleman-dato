@@ -1,4 +1,4 @@
-require "dato/meta_tags/base"
+require 'dato/meta_tags/base'
 
 module Dato
   module MetaTags
@@ -6,8 +6,8 @@ module Dato
       def build
         if image.present?
           [
-            builder.tag(:meta, property: "og:image", content: image),
-            builder.tag(:meta, name: "twitter:image", content: image)
+            builder.tag(:meta, property: 'og:image', content: image),
+            builder.tag(:meta, name: 'twitter:image', content: image)
           ]
         end
       end
@@ -17,13 +17,10 @@ module Dato
           :image,
           first_record_field_of_type(:image)
         ) do |i|
-          i.attributes[:width] >= 200 &&
-          i.attributes[:height] >= 200
+          i.width >= 200 && i.height >= 200
         end
 
-        if image
-          image.file.format("jpg").to_url
-        end
+        image.file.format('jpg').to_url if image
       end
     end
   end

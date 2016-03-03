@@ -1,4 +1,4 @@
-require "dato/meta_tags/base"
+require 'dato/meta_tags/base'
 
 module Dato
   module MetaTags
@@ -8,17 +8,17 @@ module Dato
           [
             builder.tag(
               :meta,
-              name: "description",
+              name: 'description',
               content: description
             ),
             builder.tag(
               :meta,
-              property: "og:description",
+              property: 'og:description',
               content: description
             ),
             builder.tag(
               :meta,
-              name: "twitter:description",
+              name: 'twitter:description',
               content: description
             )
           ]

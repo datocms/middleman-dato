@@ -1,4 +1,4 @@
-require "dato/meta_tags/base"
+require 'dato/meta_tags/base'
 
 module Dato
   module MetaTags
@@ -7,8 +7,8 @@ module Dato
         if title.present?
           [
             builder.content_tag(:title, title_with_suffix),
-            builder.tag(:meta, property: "og:title", content: title),
-            builder.tag(:meta, name: "twitter:title", content: title)
+            builder.tag(:meta, property: 'og:title', content: title),
+            builder.tag(:meta, name: 'twitter:title', content: title)
           ]
         end
       end
@@ -16,7 +16,8 @@ module Dato
       def title
         @title ||= seo_field_with_fallback(
           :title,
-          first_record_field_of_type(:title)
+          record && record.title_attribute &&
+            record.send(record.title_attribute)
         )
       end
 
