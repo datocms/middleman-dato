@@ -8,7 +8,7 @@ module Dato
 
     option :domain, nil, 'Space domain'
     option :token, nil, 'Space API token'
-    option :api_host, 'http://dato-api.herokuapp.com', 'Space API token'
+    option :api_host, 'http://api.datocms.com', 'Space API token'
     option :base_url, nil, 'Website base URL'
 
     def initialize(app, options_hash = {}, &block)
