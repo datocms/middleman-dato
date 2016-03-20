@@ -11,14 +11,14 @@ module Dato
           first_name: 'Peter',
           last_name: 'Griffin'
         },
-        links: {
+        relationships: {
           children: {
-            linkage: [
+            data: [
               { type: 'person', id: 'stewie' }
             ]
           },
           mother: {
-            linkage: { type: 'person', id: 'thelma' }
+            data: { type: 'person', id: 'thelma' }
           }
         }
       }

@@ -33,7 +33,7 @@ module Dato
     end
 
     def respond_to?(method, include_private = false)
-      if attributes.key?(method) || links.key?(method)
+      if attributes.key?(method) || relationships.key?(method)
         true
       else
         super
@@ -46,8 +46,8 @@ module Dato
       @payload.fetch(:attributes, {})
     end
 
-    def links
-      @payload.fetch(:links, {})
+    def relationships
+      @payload.fetch(:relationships, {})
     end
 
     def dereference_linkage(linkage)
@@ -65,8 +65,8 @@ module Dato
 
       if attributes.key?(method)
         attributes[method]
-      elsif links.key?(method)
-        dereference_linkage(links[method][:linkage])
+      elsif relationships.key?(method)
+        dereference_linkage(relationships[method][:data])
       else
         super
       end
