@@ -12,7 +12,12 @@ module Dato
     end
 
     def space
-      get('space').body.with_indifferent_access
+      include = [
+        'content_types',
+        'content_types.fields',
+        'menu_items'
+      ]
+      get('space', include: include).body.with_indifferent_access
     end
 
     def records
