@@ -14,8 +14,7 @@ module Dato
     def space
       include = [
         'content_types',
-        'content_types.fields',
-        'menu_items'
+        'content_types.fields'
       ]
       get('space', include: include).body.with_indifferent_access
     end
