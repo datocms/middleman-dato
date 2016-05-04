@@ -1,3 +1,6 @@
-require 'dato/middleman_extension'
+require "middleman-core"
 
-Dato::MiddlemanExtension.register(:dato)
+Middleman::Extensions.register(:dato) do
+  require "dato/middleman_extension"
+  Dato::MiddlemanExtension
+end
