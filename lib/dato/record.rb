@@ -22,7 +22,12 @@ module Dato
       if singleton?
         content_type.api_key.humanize.parameterize
       elsif title_attribute
-        "#{id}-#{send(title_attribute).parameterize}"
+        title = send(title_attribute)
+        if title
+          "#{id}-#{title.parameterize}"
+        else
+          id.to_s
+        end
       else
         id.to_s
       end
