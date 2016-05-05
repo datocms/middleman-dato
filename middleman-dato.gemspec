@@ -3,7 +3,7 @@ $LOAD_PATH.push File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
   s.name = 'middleman-dato'
-  s.version = '0.0.1.rc12'
+  s.version = '0.5.0'
   s.platform = Gem::Platform::RUBY
   s.authors = ['Stefano Verna']
   s.email = ['s.verna@cantierecreativo.net']
