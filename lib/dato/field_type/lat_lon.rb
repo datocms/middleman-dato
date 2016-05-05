@@ -11,6 +11,10 @@ module Dato
         @latitude = latitude
         @longitude = longitude
       end
+
+      def values
+        [latitude, longitude]
+      end
     end
   end
 end
