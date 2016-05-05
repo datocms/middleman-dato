@@ -46,7 +46,9 @@ module Dato
     end
 
     def attributes
-      fields.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |field, acc|
+      fields.each_with_object(
+        ActiveSupport::HashWithIndifferentAccess.new
+      ) do |field, acc|
         acc[field.api_key.to_sym] = send(field.api_key)
       end
     end

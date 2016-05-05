@@ -1,4 +1,4 @@
-require "dato/field_type/file"
+require 'dato/field_type/file'
 
 module Dato
   module FieldType

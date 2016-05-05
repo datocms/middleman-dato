@@ -71,7 +71,10 @@ module Dato
 
     describe '#attributes' do
       it 'returns an hash of the field values' do
-        expected_attributes = { title: "My titlè with àccents", body: 'Hi there' }
+        expected_attributes = {
+          'title' => "My titlè with àccents",
+          'body' => 'Hi there'
+        }
         expect(record.attributes).to eq expected_attributes
       end
     end
