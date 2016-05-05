@@ -8,14 +8,13 @@ module Dato
     def initialize(entities_repo)
       @entities_repo = entities_repo
       @collections_by_type = {}
+      @records_by_id = {}
 
-      build_collections_by_type!
+      build_cache!
     end
 
     def find(id)
-      collections_by_type.values.flatten.find do |record|
-        record && record.id == id
-      end
+      @records_by_id[id]
     end
 
     def respond_to?(method, include_private = false)
@@ -37,7 +36,7 @@ module Dato
       end
     end
 
-    def build_collections_by_type!
+    def build_cache!
       content_type_entities.each do |content_type|
         key, singleton = content_type_key(content_type)
         @collections_by_type[key] = if singleton
@@ -56,6 +55,8 @@ module Dato
         else
           @collections_by_type[key].push record
         end
+
+        @records_by_id[record.id] = record
       end
     end
 
