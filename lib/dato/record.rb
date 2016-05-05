@@ -24,7 +24,7 @@ module Dato
       elsif title_attribute
         title = send(title_attribute)
         if title
-          "#{id}-#{title.parameterize}"
+          "#{id}-#{title.parameterize[0..50]}"
         else
           id.to_s
         end
