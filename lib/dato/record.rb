@@ -38,15 +38,15 @@ module Dato
     end
 
     def content_type
-      entity.content_type
+      @content_type ||= entity.content_type
     end
 
     def fields
-      content_type.fields.sort_by(&:position)
+      @fields ||= content_type.fields.sort_by(&:position)
     end
 
     def attributes
-      fields.each_with_object(
+      @attributes ||= fields.each_with_object(
         ActiveSupport::HashWithIndifferentAccess.new
       ) do |field, acc|
         acc[field.api_key.to_sym] = send(field.api_key)
