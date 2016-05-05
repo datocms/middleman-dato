@@ -1,3 +1,5 @@
+require "dato/field_type/file"
+
 module Dato
   module FieldType
     class Image < Dato::FieldType::File
