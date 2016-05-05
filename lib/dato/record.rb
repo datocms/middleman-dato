@@ -1,5 +1,6 @@
 require 'forwardable'
 require 'active_support/inflector/transliterate'
+require 'active_support/hash_with_indifferent_access'
 
 Dir[File.dirname(__FILE__) + '/field_type/*.rb'].each do |file|
   require file
@@ -40,7 +41,7 @@ module Dato
     end
 
     def attributes
-      fields.each_with_object({}) do |field, acc|
+      fields.each_with_object(ActiveSupport::HashWithIndifferentAccess.new) do |field, acc|
         acc[field.api_key.to_sym] = send(field.api_key)
       end
     end
