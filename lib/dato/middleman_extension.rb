@@ -1,6 +1,8 @@
 require 'middleman-core'
-require 'dato/space'
+require 'middleman-core/version'
+require 'semantic'
 require 'dato/meta_tags_builder'
+require 'dato/space'
 
 module Dato
   class MiddlemanExtension < ::Middleman::Extension
@@ -10,6 +12,10 @@ module Dato
     option :token, nil, 'Space API token'
     option :api_host, 'http://api.datocms.com', 'Space API token'
     option :base_url, nil, 'Website base URL'
+
+    if Semantic::Version.new(Middleman::VERSION).major >= 4
+      expose_to_config dato: :dato
+    end
 
     def initialize(app, options_hash = {}, &block)
       super
@@ -22,7 +28,13 @@ module Dato
         true
       end
 
-      app.send :include, InstanceMethods
+      if Semantic::Version.new(Middleman::VERSION).major <= 3
+        app.send :include, InstanceMethods
+      end
+    end
+
+    def dato
+      space.records_repo
     end
 
     module InstanceMethods

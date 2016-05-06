@@ -3,7 +3,7 @@ $LOAD_PATH.push File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
   s.name = 'middleman-dato'
-  s.version = '0.5.8'
+  s.version = '0.5.9'
   s.platform = Gem::Platform::RUBY
   s.authors = ['Stefano Verna']
   s.email = ['s.verna@cantierecreativo.net']
@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('faraday_middleware', ['>= 0.9.0'])
   s.add_runtime_dependency('imgix', ['>= 0.3.1'])
   s.add_runtime_dependency('video_embed')
+  s.add_runtime_dependency('semantic')
 end
