@@ -20,6 +20,10 @@ module Dato
         @width = width
         @height = height
       end
+
+      def file
+        super.ch('DPR', 'Width').auto('compress', 'format')
+      end
     end
   end
 end

@@ -20,10 +20,10 @@ module Dato
       end
 
       def file
-        @file ||= Imgix::Client.new(
+        Imgix::Client.new(
           host: 'dato-images.imgix.net',
           secure: true
-        ).path(path).ch('DPR', 'Width').auto('compress', 'format')
+        ).path(path)
       end
     end
   end
