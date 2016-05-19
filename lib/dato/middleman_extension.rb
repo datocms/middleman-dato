@@ -3,6 +3,7 @@ require 'middleman-core/version'
 require 'semantic'
 require 'dato/meta_tags_builder'
 require 'dato/space'
+require 'dato/meta_tags/favicon'
 
 module Dato
   class MiddlemanExtension < ::Middleman::Extension
@@ -56,6 +57,17 @@ module Dato
           record
         )
         builder.meta_tags
+      end
+
+      def dato_favicon_meta_tags(options = {})
+        options[:theme_color] ||= "#ffffff"
+        options[:app_name] ||= ""
+        favicon_builder = MetaTags::Favicon.new(
+          self,
+          extensions[:dato].space.entity,
+          options[:theme_color]
+        )
+        favicon_builder.build
       end
     end
   end

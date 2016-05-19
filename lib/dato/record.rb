@@ -11,7 +11,7 @@ module Dato
     extend Forwardable
 
     attr_reader :entity
-    def_delegators :entity, :id, :type
+    def_delegators :entity, :id, :type, :content_type
 
     def initialize(entity, records_repo)
       @entity = entity

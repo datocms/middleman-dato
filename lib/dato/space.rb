@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'dato/client'
 require 'dato/entities_repo'
 require 'dato/records_repo'
