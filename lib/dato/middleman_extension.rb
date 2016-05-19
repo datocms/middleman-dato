@@ -60,8 +60,8 @@ module Dato
       end
 
       def dato_favicon_meta_tags(options = {})
-        options[:theme_color] ||= "#ffffff"
-        options[:app_name] ||= ""
+        options[:theme_color] ||= '#ffffff'
+        options[:app_name] ||= ''
         favicon_builder = MetaTags::Favicon.new(
           self,
           extensions[:dato].space.entity,
