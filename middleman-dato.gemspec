@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 $LOAD_PATH.push File.expand_path('../lib', __FILE__)
+require 'dato/version'
 
 Gem::Specification.new do |s|
   s.name = 'middleman-dato'
-  s.version = '0.5.10'
+  s.version = Dato::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ['Stefano Verna']
   s.email = ['s.verna@cantierecreativo.net']
