@@ -162,5 +162,27 @@ module Dato
         end
       end
     end
+
+    context 'equality' do
+      subject(:same_record) { described_class.new(entity, repo) }
+
+      subject(:another_record) { described_class.new(another_entity, repo) }
+      let(:another_entity) do
+        double(
+          'Dato::JsonApiEntity(Record)',
+          id: '15'
+        )
+      end
+
+
+      it 'two records are equal if their id is the same' do
+        expect(record).to eq same_record
+      end
+
+      it 'else they\'re not' do
+        expect(record).not_to eq another_record
+        expect(record).not_to eq "foobar"
+      end
+    end
   end
 end

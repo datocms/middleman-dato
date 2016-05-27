@@ -18,6 +18,10 @@ module Dato
       @records_repo = records_repo
     end
 
+    def ==(record)
+      record.is_a?(Record) && record.id == id
+    end
+
     def slug
       if singleton?
         content_type.api_key.humanize.parameterize
