@@ -57,14 +57,14 @@ article.cover_image.file.width(500).fit('crop').to_url
 article.video.iframe_embed(800, 600)
 ```
 
-Please refer to the code for more informations.
+Please [refer to the code](https://github.com/datocms/middleman-dato/tree/master/lib/middleman_dato/field_type) for more informations.
 
 ### `dato_meta_tags`
 
 This helper takes any record with a SEO field and generates SEO, Facebook OpenGraph and Twitter card meta tags based on it:
 
 ```ruby
-dato_meta_tags(dato.homepage)
+<%= dato_meta_tags(dato.homepage) %>
 ```
 
 ```html
@@ -94,5 +94,5 @@ dato_meta_tags(dato.homepage)
 This helper generates meta tags based on the Favicon image specified within the Space:
 
 ```
-= dato_meta_tags(dato.homepage)
+<%= dato_meta_tags(dato.homepage) %>
 ```
