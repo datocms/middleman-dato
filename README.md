@@ -93,6 +93,6 @@ This helper takes any record with a SEO field and generates SEO, Facebook OpenGr
 
 This helper generates meta tags based on the Favicon image specified within the Space:
 
-```
+```ruby
 <%= dato_favicon_meta_tags(theme_color: '#D97C5F') %>
 ```
