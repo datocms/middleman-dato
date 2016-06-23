@@ -5,7 +5,7 @@ module MiddlemanDato
       let(:attributes) do
         {
           url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0',
-          provider_url: 'https://www.youtube.com',
+          provider_uid: '123123',
           thumbnail_url: 'http://i3.ytimg.com/vi/oHg5SJYRHA0/hqdefault.jpg',
           title: "RickRoll'D",
           width: 640,
@@ -15,7 +15,7 @@ module MiddlemanDato
 
       it 'responds to path, format, size, width and height' do
         expect(video.url).to eq 'https://www.youtube.com/watch?v=oHg5SJYRHA0'
-        expect(video.provider_url).to eq 'https://www.youtube.com'
+        expect(video.provider_uid).to eq '123123'
         expect(video.thumbnail_url).to eq 'http://i3.ytimg.com/vi/oHg5SJYRHA0/hqdefault.jpg'
         expect(video.title).to eq "RickRoll'D"
         expect(video.width).to eq 640

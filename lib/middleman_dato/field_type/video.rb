@@ -40,6 +40,10 @@ module MiddlemanDato
         @attributes[:provider_url]
       end
 
+      def provider_uid
+        @attributes[:provider_uid]
+      end
+
       def iframe_embed(width = nil, height = nil)
         VideoEmbed.embed(url, { width: width, height: height }.compact)
       end
