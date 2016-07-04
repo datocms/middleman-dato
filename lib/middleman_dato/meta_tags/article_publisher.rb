@@ -5,7 +5,7 @@ module MiddlemanDato
   module MetaTags
     class ArticlePublisher < OgMetaTag
       def buildable?
-        record && !record.singleton? &&
+        item && !item.singleton? &&
           global_seo_field(:facebook_page_url).present?
       end
 

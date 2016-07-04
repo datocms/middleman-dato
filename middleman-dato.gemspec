@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors = ['Stefano Verna']
   s.email = ['s.verna@cantierecreativo.net']
   s.homepage = 'http://cantierecreativo.net'
-  s.summary = 'Fetches data from a Dato space'
-  s.description = 'Fetches data from a Dato space'
+  s.summary = 'Fetches data from a Dato site'
+  s.description = 'Fetches data from a Dato site'
 
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")

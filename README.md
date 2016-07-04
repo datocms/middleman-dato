@@ -21,18 +21,18 @@ activate :dato,
 
 ### `dato`
 
-Using this helper you can access to any record stored in your space by content type. 
-That is, if your space has a Content Type with `article` as API identifier, you can get 
-the complete array of records with `dato.articles` (yep, the identifier pluralized). 
+Using this helper you can access to any item stored in your site by item type. 
+That is, if your site has an Item Type with `article` as API identifier, you can get 
+the complete array of items with `dato.articles` (yep, the identifier pluralized). 
 
-If a Content Type is marked as Singleton (ie. `about_page`) you don't need to pluralize and 
-a call to `dato.about_page` directly returns the Record (or `nil`, if still hasn't been created
+If a Item Type is marked as Singleton (ie. `about_page`) you don't need to pluralize and 
+a call to `dato.about_page` directly returns the Item (or `nil`, if still hasn't been created
 within the backend).
 
-You can query any Record field value with a method called like the field API identifier.
+You can query any Item field value with a method called like the field API identifier.
 
-If a Content Type has a String field with Title appeareance, than the record responds to `.slug`,
-returning a slugified version of the title itself (or the record identifier, if the title is empty).
+If a Item Type has a String field with Title appeareance, than the item responds to `.slug`,
+returning a slugified version of the title itself (or the item identifier, if the title is empty).
 
 You can use this helper within Middleman `config.rb`, as well as within your views:
 
@@ -61,7 +61,7 @@ Please [refer to the code](https://github.com/datocms/middleman-dato/tree/master
 
 ### `dato_meta_tags`
 
-This helper takes any record with a SEO field and generates SEO, Facebook OpenGraph and Twitter card meta tags based on it:
+This helper takes any item with a SEO field and generates SEO, Facebook OpenGraph and Twitter card meta tags based on it:
 
 ```ruby
 <%= dato_meta_tags(dato.homepage) %>
@@ -91,7 +91,7 @@ This helper takes any record with a SEO field and generates SEO, Facebook OpenGr
 
 ### `dato_favicon_meta_tags`
 
-This helper generates meta tags based on the Favicon image specified within the Space:
+This helper generates meta tags based on the Favicon image specified within the Site:
 
 ```ruby
 <%= dato_favicon_meta_tags(theme_color: '#D97C5F') %>

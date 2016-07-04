@@ -5,7 +5,7 @@ module MiddlemanDato
   module MetaTags
     class ArticleModifiedTime < OgMetaTag
       def buildable?
-        record && !record.singleton?
+        item && !item.singleton?
       end
 
       def name
@@ -13,7 +13,7 @@ module MiddlemanDato
       end
 
       def value
-        record.updated_at.iso8601
+        item.updated_at.iso8601
       end
     end
   end

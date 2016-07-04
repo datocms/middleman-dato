@@ -1,11 +1,11 @@
 module MiddlemanDato
-  RSpec.describe Record do
-    subject(:record) { described_class.new(entity, repo) }
+  RSpec.describe Item do
+    subject(:item) { described_class.new(entity, repo) }
     let(:entity) do
       double(
-        'MiddlemanDato::JsonApiEntity(Record)',
+        'MiddlemanDato::JsonApiEntity(Item)',
         id: '14',
-        content_type: content_type,
+        item_type: item_type,
         title: "My titlè with àccents",
         body: 'Hi there',
         position: 2,
@@ -13,9 +13,9 @@ module MiddlemanDato
       )
     end
     let(:repo) do
-      instance_double('MiddlemanDato::RecordsRepo')
+      instance_double('MiddlemanDato::ItemsRepo')
     end
-    let(:content_type) do
+    let(:item_type) do
       double(
         'MiddlemanDato::JsonApiEntity(Content Type)',
         singleton: is_singleton,
@@ -50,7 +50,7 @@ module MiddlemanDato
         let(:is_singleton) { true }
 
         it 'returns the parameterized content type api key' do
-          expect(record.slug).to eq 'work-item'
+          expect(item.slug).to eq 'work-item'
         end
       end
 
@@ -58,13 +58,13 @@ module MiddlemanDato
         let(:fields) { [] }
 
         it 'returns the ID' do
-          expect(record.slug).to eq '14'
+          expect(item.slug).to eq '14'
         end
       end
 
       context 'non singleton, title field' do
         it 'returns the ID + title' do
-          expect(record.slug).to eq '14-my-title-with-accents'
+          expect(item.slug).to eq '14-my-title-with-accents'
         end
       end
     end
@@ -75,35 +75,35 @@ module MiddlemanDato
           'title' => "My titlè with àccents",
           'body' => 'Hi there'
         }
-        expect(record.attributes).to eq expected_attributes
+        expect(item.attributes).to eq expected_attributes
       end
     end
 
     describe 'position' do
       it 'returns the entity position field' do
-        expect(record.position).to eq 2
+        expect(item.position).to eq 2
       end
     end
 
     describe 'updated_at' do
       it 'returns the entity updated_at field' do
-        expect(record.updated_at).to be_a Time
+        expect(item.updated_at).to be_a Time
       end
     end
 
     describe 'dynamic methods' do
       context 'existing field' do
         it 'returns the field value' do
-          expect(record.respond_to?(:body)).to be_truthy
-          expect(record.body).to eq 'Hi there'
+          expect(item.respond_to?(:body)).to be_truthy
+          expect(item.body).to eq 'Hi there'
         end
 
         context 'localized field' do
           let(:entity) do
             double(
-              'MiddlemanDato::JsonApiEntity(Record)',
+              'MiddlemanDato::JsonApiEntity(Item)',
               id: '14',
-              content_type: content_type,
+              item_type: item_type,
               title: { it: 'Foo', en: 'Bar' }
             )
           end
@@ -123,14 +123,14 @@ module MiddlemanDato
 
           it 'returns the value for the current locale' do
             I18n.with_locale(:it) do
-              expect(record.title).to eq 'Foo'
+              expect(item.title).to eq 'Foo'
             end
           end
 
           context 'non existing value' do
             it 'raises nil' do
               I18n.with_locale(:ru) do
-                expect(record.title).to eq nil
+                expect(item.title).to eq nil
               end
             end
           end
@@ -139,8 +139,8 @@ module MiddlemanDato
 
       context 'non existing field' do
         it 'raises NoMethodError' do
-          expect(record.respond_to?(:qux)).to be_falsy
-          expect { record.qux }.to raise_error NoMethodError
+          expect(item.respond_to?(:qux)).to be_falsy
+          expect { item.qux }.to raise_error NoMethodError
         end
       end
 
@@ -158,30 +158,30 @@ module MiddlemanDato
         end
 
         it 'raises RuntimeError' do
-          expect { record.title }.to raise_error RuntimeError
+          expect { item.title }.to raise_error RuntimeError
         end
       end
     end
 
     context 'equality' do
-      subject(:same_record) { described_class.new(entity, repo) }
+      subject(:same_item) { described_class.new(entity, repo) }
 
-      subject(:another_record) { described_class.new(another_entity, repo) }
+      subject(:another_item) { described_class.new(another_entity, repo) }
       let(:another_entity) do
         double(
-          'MiddlemanDato::JsonApiEntity(Record)',
+          'MiddlemanDato::JsonApiEntity(Item)',
           id: '15'
         )
       end
 
 
-      it 'two records are equal if their id is the same' do
-        expect(record).to eq same_record
+      it 'two items are equal if their id is the same' do
+        expect(item).to eq same_item
       end
 
       it 'else they\'re not' do
-        expect(record).not_to eq another_record
-        expect(record).not_to eq "foobar"
+        expect(item).not_to eq another_item
+        expect(item).not_to eq "foobar"
       end
     end
   end

@@ -11,16 +11,16 @@ module MiddlemanDato
       @token = token
     end
 
-    def space
+    def site
       include = [
-        'content_types',
-        'content_types.fields'
+        'item_types',
+        'item_types.fields'
       ]
-      get('space', include: include).body.with_indifferent_access
+      get('site', include: include).body.with_indifferent_access
     end
 
-    def records
-      get('records', 'page[limit]' => 10_000).body.with_indifferent_access
+    def items
+      get('items', 'page[limit]' => 10_000).body.with_indifferent_access
     end
 
     def get(*args)
@@ -37,13 +37,13 @@ module MiddlemanDato
         headers: {
           'Content-Type' => 'application/json',
           'Accept' => 'application/json',
-          'X-Space-Domain' => @domain,
+          'X-Site-Domain' => @domain,
           'Authorization' => "Api-Key #{@token}"
         }
       }
       @connection ||= Faraday.new(options) do |c|
         c.request :json
-        c.response :json, content_type: /\bjson$/
+        c.response :json, item_type: /\bjson$/
         c.response :raise_error
         c.adapter :net_http
       end

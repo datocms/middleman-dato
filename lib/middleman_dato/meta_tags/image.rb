@@ -15,7 +15,7 @@ module MiddlemanDato
       def image
         image = seo_field_with_fallback(
           :image,
-          first_record_field_of_type(:image)
+          first_item_field_of_type(:image)
         ) do |i|
           i.width >= 200 && i.height >= 200
         end

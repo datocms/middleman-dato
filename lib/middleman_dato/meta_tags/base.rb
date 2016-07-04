@@ -4,17 +4,17 @@ require 'middleman_dato/field_type/seo'
 module MiddlemanDato
   module MetaTags
     class Base
-      attr_reader :builder, :base_url, :space, :content_type, :record
+      attr_reader :builder, :base_url, :site, :item_type, :item
 
-      def initialize(builder, base_url, space, record)
-        @space = space
+      def initialize(builder, base_url, site, item)
+        @site = site
         @base_url = base_url
-        @record = record
+        @item = item
         @builder = builder
       end
 
       def seo_field_with_fallback(attribute, alternative = nil, &block)
-        seo = first_record_field_of_type(:seo)
+        seo = first_item_field_of_type(:seo)
 
         alternatives = []
 
@@ -33,21 +33,21 @@ module MiddlemanDato
       end
 
       def no_index?
-        space && space.no_index
+        site && site.no_index
       end
 
       def global_seo_field(attribute)
         global_seo[attribute] if global_seo
       end
 
-      def first_record_field_of_type(type)
-        return nil unless record
+      def first_item_field_of_type(type)
+        return nil unless item
 
-        field = record.fields.detect do |f|
+        field = item.fields.detect do |f|
           f.field_type == type.to_s
         end
 
-        record.send(field.api_key) if field
+        item.send(field.api_key) if field
       end
 
       def fallback_seo
@@ -58,9 +58,9 @@ module MiddlemanDato
 
       def global_seo
         @global_seo ||= begin
-          if space && space.global_seo
-            global_seo = space.global_seo
-            if space.locales.size > 1
+          if site && site.global_seo
+            global_seo = site.global_seo
+            if site.locales.size > 1
               global_seo[I18n.locale]
             else
               global_seo

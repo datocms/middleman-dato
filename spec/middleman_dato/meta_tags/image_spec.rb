@@ -3,13 +3,13 @@ require 'spec_helper'
 module MiddlemanDato
   module MetaTags
     RSpec.describe Image do
-      subject(:meta_tag) { described_class.new(builder, base_url, space, record) }
+      subject(:meta_tag) { described_class.new(builder, base_url, site, item) }
       let(:builder) { ::MockBuilder.new }
       let(:base_url) { nil }
-      let(:space) { nil }
-      let(:record) do
+      let(:site) { nil }
+      let(:item) do
         double(
-          'MiddlemanDato::Record',
+          'MiddlemanDato::Item',
           fields: [double('MiddlemanDato::JsonApiEntity', api_key: 'foo', field_type: 'image')],
           foo: image,
           singleton?: false

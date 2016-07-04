@@ -1,20 +1,20 @@
 require 'active_support/core_ext/string'
-require 'middleman_dato/record'
+require 'middleman_dato/item'
 
 module MiddlemanDato
-  class RecordsRepo
+  class ItemsRepo
     attr_reader :entities_repo, :collections_by_type
 
     def initialize(entities_repo)
       @entities_repo = entities_repo
       @collections_by_type = {}
-      @records_by_id = {}
+      @items_by_id = {}
 
       build_cache!
     end
 
     def find(id)
-      @records_by_id[id]
+      @items_by_id[id]
     end
 
     def respond_to?(method, include_private = false)
@@ -27,9 +27,9 @@ module MiddlemanDato
 
     private
 
-    def content_type_key(content_type)
-      api_key = content_type.api_key
-      if content_type.singleton
+    def item_type_key(item_type)
+      api_key = item_type.api_key
+      if item_type.singleton
         [api_key.to_sym, true]
       else
         [api_key.pluralize.to_sym, false]
@@ -37,35 +37,35 @@ module MiddlemanDato
     end
 
     def build_cache!
-      content_type_entities.each do |content_type|
-        key, singleton = content_type_key(content_type)
+      item_type_entities.each do |item_type|
+        key, singleton = item_type_key(item_type)
         @collections_by_type[key] = if singleton
                                       nil
                                     else
-                                      RecordCollection.new
+                                      ItemCollection.new
                                     end
       end
 
-      record_entities.each do |record_entity|
-        record = Record.new(record_entity, self)
+      item_entities.each do |item_entity|
+        item = Item.new(item_entity, self)
 
-        key, singleton = content_type_key(record_entity.content_type)
+        key, singleton = item_type_key(item_entity.item_type)
         if singleton
-          @collections_by_type[key] = record
+          @collections_by_type[key] = item
         else
-          @collections_by_type[key].push record
+          @collections_by_type[key].push item
         end
 
-        @records_by_id[record.id] = record
+        @items_by_id[item.id] = item
       end
     end
 
-    def content_type_entities
-      entities_repo.find_entities_of_type('content_type')
+    def item_type_entities
+      entities_repo.find_entities_of_type('item_type')
     end
 
-    def record_entities
-      entities_repo.find_entities_of_type('record')
+    def item_entities
+      entities_repo.find_entities_of_type('item')
     end
 
     def method_missing(method, *arguments, &block)
@@ -76,11 +76,11 @@ module MiddlemanDato
       end
     end
 
-    class RecordCollection < Array
+    class ItemCollection < Array
       def each(&block)
         if block && block.arity == 2
-          each_with_object({}) do |record, acc|
-            acc[record.id] = record
+          each_with_object({}) do |item, acc|
+            acc[item.id] = item
           end.each(&block)
         else
           super(&block)
@@ -89,7 +89,7 @@ module MiddlemanDato
 
       def [](id)
         if id.is_a? String
-          find { |record| record.id == id }
+          find { |item| item.id == id }
         else
           super(id)
         end

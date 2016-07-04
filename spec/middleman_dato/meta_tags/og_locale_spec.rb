@@ -3,11 +3,11 @@ require 'spec_helper'
 module MiddlemanDato
   module MetaTags
     RSpec.describe OgLocale do
-      subject(:meta_tag) { described_class.new(builder, base_url, space, record) }
+      subject(:meta_tag) { described_class.new(builder, base_url, site, item) }
       let(:builder) { ::MockBuilder.new }
       let(:base_url) { nil }
-      let(:space) { nil }
-      let(:record) { nil }
+      let(:site) { nil }
+      let(:item) { nil }
 
       describe '#value' do
         it 'returns the current locale' do

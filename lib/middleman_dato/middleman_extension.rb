@@ -2,16 +2,16 @@ require 'middleman-core'
 require 'middleman-core/version'
 require 'semantic'
 require 'middleman_dato/meta_tags_builder'
-require 'middleman_dato/space'
+require 'middleman_dato/site'
 require 'middleman_dato/meta_tags/favicon'
 
 module MiddlemanDato
   class MiddlemanExtension < ::Middleman::Extension
-    attr_reader :space
+    attr_reader :site
 
-    option :domain, nil, 'Space domain'
-    option :token, nil, 'Space API token'
-    option :api_host, 'http://api.datocms.com', 'Space API token'
+    option :domain, nil, 'Site domain'
+    option :token, nil, 'Site API token'
+    option :api_host, 'http://site-api.datocms.com', 'Site API host'
     option :base_url, nil, 'Website base URL'
 
     if Semantic::Version.new(Middleman::VERSION).major >= 4
@@ -21,11 +21,11 @@ module MiddlemanDato
     def initialize(app, options_hash = {}, &block)
       super
 
-      @space = space = MiddlemanDato::Space.new(options)
-      @space.refresh!
+      @site = site = MiddlemanDato::Site.new(options)
+      @site.refresh!
 
       app.before do
-        space.refresh! if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
+        site.refresh! if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
         true
       end
 
@@ -35,26 +35,26 @@ module MiddlemanDato
     end
 
     def dato
-      space.records_repo
+      site.items_repo
     end
 
     module InstanceMethods
       def dato
-        extensions[:dato].space.records_repo
+        extensions[:dato].site.items_repo
       end
     end
 
     helpers do
       def dato
-        extensions[:dato].space.records_repo
+        extensions[:dato].site.items_repo
       end
 
-      def dato_meta_tags(record)
+      def dato_meta_tags(item)
         builder = MetaTagsBuilder.new(
           self,
           extensions[:dato].options[:base_url],
-          extensions[:dato].space.entity,
-          record
+          extensions[:dato].site.entity,
+          item
         )
         builder.meta_tags
       end
@@ -64,7 +64,7 @@ module MiddlemanDato
         options[:app_name] ||= ''
         favicon_builder = MetaTags::Favicon.new(
           self,
-          extensions[:dato].space.entity,
+          extensions[:dato].site.entity,
           options[:theme_color]
         )
         favicon_builder.build

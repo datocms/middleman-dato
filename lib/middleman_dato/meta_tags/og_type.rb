@@ -12,9 +12,9 @@ module MiddlemanDato
       end
 
       def value
-        if !record
+        if !item
           'website'
-        elsif record.singleton?
+        elsif item.singleton?
           'website'
         else
           'article'

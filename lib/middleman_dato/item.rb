@@ -7,24 +7,24 @@ Dir[File.dirname(__FILE__) + '/field_type/*.rb'].each do |file|
 end
 
 module MiddlemanDato
-  class Record
+  class Item
     extend Forwardable
 
     attr_reader :entity
-    def_delegators :entity, :id, :type, :content_type
+    def_delegators :entity, :id, :type, :item_type
 
-    def initialize(entity, records_repo)
+    def initialize(entity, items_repo)
       @entity = entity
-      @records_repo = records_repo
+      @items_repo = items_repo
     end
 
-    def ==(record)
-      record.is_a?(Record) && record.id == id
+    def ==(item)
+      item.is_a?(Item) && item.id == id
     end
 
     def slug
       if singleton?
-        content_type.api_key.humanize.parameterize
+        item_type.api_key.humanize.parameterize
       elsif title_attribute
         title = send(title_attribute)
         if title
@@ -38,15 +38,16 @@ module MiddlemanDato
     end
 
     def singleton?
-      content_type.singleton
+      item_type.singleton
     end
 
-    def content_type
-      @content_type ||= entity.content_type
+    def item_type
+      @item_type ||= entity.item_type
     end
+    alias_method :content_type, :item_type
 
     def fields
-      @fields ||= content_type.fields.sort_by(&:position)
+      @fields ||= item_type.fields.sort_by(&:position)
     end
 
     def attributes
@@ -66,8 +67,8 @@ module MiddlemanDato
     end
 
     def to_s
-      api_key = content_type.api_key
-      "#<Record id=#{id} content_type=#{api_key} attributes=#{attributes}>"
+      api_key = item_type.api_key
+      "#<Item id=#{id} item_type=#{api_key} attributes=#{attributes}>"
     end
     alias inspect to_s
 
@@ -102,7 +103,7 @@ module MiddlemanDato
                   entity.send(method)
                 end
 
-        value && type_klass.parse(value, @records_repo)
+        value && type_klass.parse(value, @items_repo)
       else
         raise "Cannot convert field `#{method}` of type `#{field_type}`"
       end

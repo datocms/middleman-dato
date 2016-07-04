@@ -1,67 +1,67 @@
-require 'middleman_dato/records_repo'
+require 'middleman_dato/items_repo'
 
 module MiddlemanDato
-  RSpec.describe RecordsRepo do
+  RSpec.describe ItemsRepo do
     subject(:repo) { described_class.new(entities_repo) }
     let(:entities_repo) do
       instance_double('MiddlemanDato::EntitiesRepo')
     end
-    let(:content_type) do
+    let(:item_type) do
       double('MiddlemanDato::JsonApiEntity', api_key: 'post', singleton: false)
     end
-    let(:singleton_content_type) do
+    let(:singleton_item_type) do
       double('MiddlemanDato::JsonApiEntity', api_key: 'homepage', singleton: true)
     end
-    let(:record_entity) do
-      double('MiddlemanDato::JsonApiEntity', content_type: content_type)
+    let(:item_entity) do
+      double('MiddlemanDato::JsonApiEntity', item_type: item_type)
     end
-    let(:singleton_record_entity) do
-      double('MiddlemanDato::JsonApiEntity', content_type: singleton_content_type)
+    let(:singleton_item_entity) do
+      double('MiddlemanDato::JsonApiEntity', item_type: singleton_item_type)
     end
-    let(:record) do
-      instance_double('MiddlemanDato::Record', id: '14')
+    let(:item) do
+      instance_double('MiddlemanDato::Item', id: '14')
     end
-    let(:singleton_record) do
-      instance_double('MiddlemanDato::Record', id: '22')
+    let(:singleton_item) do
+      instance_double('MiddlemanDato::Item', id: '22')
     end
 
     before do
-      allow(entities_repo).to receive(:find_entities_of_type).with('content_type') do
-        [content_type, singleton_content_type]
+      allow(entities_repo).to receive(:find_entities_of_type).with('item_type') do
+        [item_type, singleton_item_type]
       end
 
-      allow(entities_repo).to receive(:find_entities_of_type).with('record') do
-        [record_entity, singleton_record_entity]
+      allow(entities_repo).to receive(:find_entities_of_type).with('item') do
+        [item_entity, singleton_item_entity]
       end
 
-      allow(Record).to receive(:new).with(record_entity, anything) do
-        record
+      allow(Item).to receive(:new).with(item_entity, anything) do
+        item
       end
 
-      allow(Record).to receive(:new).with(singleton_record_entity, anything) do
-        singleton_record
+      allow(Item).to receive(:new).with(singleton_item_entity, anything) do
+        singleton_item
       end
     end
 
     describe '#find' do
-      it 'returns the specified record' do
-        expect(repo.find('14')).to eq record
-        expect(repo.find('22')).to eq singleton_record
+      it 'returns the specified item' do
+        expect(repo.find('14')).to eq item
+        expect(repo.find('22')).to eq singleton_item
       end
     end
 
-    describe 'content_types' do
+    describe 'item_types' do
       describe 'singleton' do
-        it 'returns the associated record' do
+        it 'returns the associated item' do
           expect(repo.respond_to?(:homepage)).to be_truthy
-          expect(repo.homepage).to eq singleton_record
+          expect(repo.homepage).to eq singleton_item
         end
       end
 
       describe 'non-singleton' do
-        it 'returns the associated records' do
+        it 'returns the associated items' do
           expect(repo.respond_to?(:posts)).to be_truthy
-          expect(repo.posts).to eq [record]
+          expect(repo.posts).to eq [item]
         end
       end
 
@@ -73,16 +73,16 @@ module MiddlemanDato
       end
     end
 
-    describe RecordsRepo::RecordCollection do
+    describe ItemsRepo::ItemCollection do
       subject(:collection) { described_class.new(items) }
       let(:items) do
         [foo]
       end
 
-      let(:foo) { double('MiddlemanDato::Record', id: '1', name: 'Foo') }
+      let(:foo) { double('MiddlemanDato::Item', id: '1', name: 'Foo') }
 
       describe '#[]' do
-        it 'returns the record with the specified id or index' do
+        it 'returns the item with the specified id or index' do
           expect(collection['1']).to eq foo
           expect(collection[0]).to eq foo
         end
@@ -96,7 +96,7 @@ module MiddlemanDato
 
       describe '#each' do
         context 'with arity == 2' do
-          it 'iterates with id and record' do
+          it 'iterates with id and item' do
             collection.each do |a, b|
               expect(a).to eq '1'
               expect(b).to eq foo
