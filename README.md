@@ -1,5 +1,7 @@
 # middleman-dato
 
+[![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato)
+
 Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS.
 
 DatoCMS is a fully customizable administrative backend for your static websites. 
