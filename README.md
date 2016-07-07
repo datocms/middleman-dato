@@ -1,5 +1,11 @@
 # middleman-dato
 
+Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS.
+
+DatoCMS is a fully customizable administrative backend for your static websites. 
+
+This gem works for Middleman v3 and v4.
+
 ## Setup
 
 ```ruby
@@ -96,3 +102,7 @@ This helper generates meta tags based on the Favicon image specified within the 
 ```ruby
 <%= dato_favicon_meta_tags(theme_color: '#D97C5F') %>
 ```
+
+## Documentation
+
+To learn more about DatoCMS, head over to [the documentation](http://www.datocms.com/docs/).
