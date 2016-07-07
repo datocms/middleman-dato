@@ -2,11 +2,13 @@
 
 [![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato)
 
-Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS.
-
-DatoCMS is a fully customizable administrative backend for your static websites. 
+Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS, a fully customizable administrative backend for your static websites. 
 
 This gem works for Middleman v3 and v4.
+
+## Documentation and video tutorials
+
+To learn more about DatoCMS and how you can use it with your Middleman website, head over to [our documentation](http://www.datocms.com/docs/) and [video tutorials](http://www.datocms.com/docs/tutorials/middleman_netlify/).
 
 ## Setup
 
@@ -105,6 +107,21 @@ This helper generates meta tags based on the Favicon image specified within the 
 <%= dato_favicon_meta_tags(theme_color: '#D97C5F') %>
 ```
 
-## Documentation
+## Submitting a Pull Request
 
-To learn more about DatoCMS, head over to [the documentation](http://www.datocms.com/docs/).
+1. Fork it.
+2. Create a branch (`git checkout -b some_bufix`)
+3. Commit your changes (`git commit -am "Fix typos"`)
+4. Push to the branch (`git push origin some_bugfix`)
+5. Open a [Pull Request][1]
+6. Enjoy a refreshing Diet Coke and wait
+
+## Testing
+
+To run the tests:
+
+    $ rake
+
+If nothing complains, congratulations!
+
+[1]: http://github.com/datocms/middleman-dato/pulls
