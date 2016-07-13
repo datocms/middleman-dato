@@ -20,7 +20,22 @@ module MiddlemanDato
     end
 
     def items
-      get('items', 'page[limit]' => 10_000).body.with_indifferent_access
+      items_per_page = 500
+      base_response = get('items', 'page[limit]' => 1).body.
+        with_indifferent_access
+
+      pages = (base_response[:meta][:total_count] / items_per_page.to_f).ceil
+      base_response[:data] = []
+
+      pages.times do |page|
+        base_response[:data] += get(
+          'items',
+          'page[offset]' => items_per_page * page,
+          'page[limit]' => items_per_page
+        ).body.with_indifferent_access[:data]
+      end
+
+      base_response
     end
 
     def get(*args)
