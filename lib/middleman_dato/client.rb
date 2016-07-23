@@ -60,6 +60,7 @@ module MiddlemanDato
         c.request :json
         c.response :json, item_type: /\bjson$/
         c.response :raise_error
+        c.use FaradayMiddleware::FollowRedirects
         c.adapter :net_http
       end
     end

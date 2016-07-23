@@ -11,7 +11,7 @@ module MiddlemanDato
 
     option :domain, nil, 'Site domain'
     option :token, nil, 'Site API token'
-    option :api_host, 'http://site-api.datocms.com', 'Site API host'
+    option :api_host, 'https://site-api.datocms.com', 'Site API host'
     option :base_url, nil, 'Website base URL'
 
     if Semantic::Version.new(Middleman::VERSION).major >= 4
