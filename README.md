@@ -16,8 +16,7 @@ To learn more about DatoCMS and how you can use it with your Middleman website, 
 # config.rb
 
 activate :dato,
-  domain: 'lively-smoke-1134.admin.datocms.com',
-  token: 'XXXYYY',
+  token: 'SITE_READ_ONLY_TOKEN',
   base_url: 'http://www.mywebsite.com'
 
 # feel free to use dato from now on:

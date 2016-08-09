@@ -9,7 +9,7 @@ module MiddlemanDato
   class MiddlemanExtension < ::Middleman::Extension
     attr_reader :site
 
-    option :domain, nil, 'Site domain'
+    option :domain, nil, 'Site domain (legacy)'
     option :token, nil, 'Site API token'
     option :api_host, 'https://site-api.datocms.com', 'Site API host'
     option :base_url, nil, 'Website base URL'

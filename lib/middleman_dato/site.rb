@@ -29,7 +29,6 @@ module MiddlemanDato
     def client
       @client ||= Client.new(
         options[:api_host],
-        options[:domain],
         options[:token]
       )
     end

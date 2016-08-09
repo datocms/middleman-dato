@@ -5,9 +5,8 @@ require 'active_support/core_ext/hash/indifferent_access'
 
 module MiddlemanDato
   class Client
-    def initialize(host, domain, token)
+    def initialize(host, token)
       @host = host
-      @domain = domain
       @token = token
     end
 
@@ -52,7 +51,6 @@ module MiddlemanDato
         headers: {
           'Content-Type' => 'application/json',
           'Accept' => 'application/json',
-          'X-Site-Domain' => @domain,
           'Authorization' => "Api-Key #{@token}"
         }
       }
