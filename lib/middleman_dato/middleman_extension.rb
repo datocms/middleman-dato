@@ -1,8 +1,10 @@
+# frozen_string_literal: true
 require 'middleman-core'
 require 'middleman-core/version'
 require 'semantic'
+require 'dato/site/client'
+require 'dato/local/site'
 require 'middleman_dato/meta_tags_builder'
-require 'middleman_dato/site'
 require 'middleman_dato/meta_tags/favicon'
 
 module MiddlemanDato
@@ -11,7 +13,7 @@ module MiddlemanDato
 
     option :domain, nil, 'Site domain (legacy)'
     option :token, nil, 'Site API token'
-    option :api_host, 'https://site-api.datocms.com', 'Site API host'
+    option :api_base_url, 'https://site-api.datocms.com', 'Site API host'
     option :base_url, nil, 'Website base URL'
 
     if Semantic::Version.new(Middleman::VERSION).major >= 4
@@ -21,17 +23,24 @@ module MiddlemanDato
     def initialize(app, options_hash = {}, &block)
       super
 
-      @site = site = MiddlemanDato::Site.new(options)
-      @site.refresh!
+      @site = site = Dato::Local::Site.new(client)
+      @site.load
 
       app.before do
-        site.refresh! if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
+        site.load if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
         true
       end
 
       if Semantic::Version.new(Middleman::VERSION).major <= 3
         app.send :include, InstanceMethods
       end
+    end
+
+    def client
+      @client ||= Dato::Site::Client.new(
+        options[:token],
+        base_url: options[:api_base_url]
+      )
     end
 
     def dato

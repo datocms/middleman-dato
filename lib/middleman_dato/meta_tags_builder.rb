@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'middleman_dato/meta_tags/title'
 require 'middleman_dato/meta_tags/description'
 require 'middleman_dato/meta_tags/image'

@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 $LOAD_PATH.push File.expand_path('../lib', __FILE__)
 require 'middleman_dato/version'
 
@@ -20,9 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency('middleman-core', ['>= 3.3.12'])
-  s.add_runtime_dependency('faraday', ['>= 0.9.0'])
-  s.add_runtime_dependency('faraday_middleware', ['>= 0.9.0'])
-  s.add_runtime_dependency('imgix', ['>= 0.3.1'])
-  s.add_runtime_dependency('video_embed')
+  s.add_runtime_dependency('dato', ['>= 0.1.6'])
   s.add_runtime_dependency('semantic')
+  s.add_runtime_dependency('activesupport')
 end

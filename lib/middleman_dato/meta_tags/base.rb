@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 require 'forwardable'
-require 'middleman_dato/field_type/seo'
+require 'dato/local/field_type/seo'
 
 module MiddlemanDato
   module MetaTags
@@ -52,7 +53,7 @@ module MiddlemanDato
 
       def fallback_seo
         @fallback_seo ||= begin
-          FieldType::Seo.parse(global_seo[:fallback_seo], nil) if global_seo
+          Dato::Local::FieldType::Seo.parse(global_seo[:fallback_seo], nil) if global_seo
         end
       end
 

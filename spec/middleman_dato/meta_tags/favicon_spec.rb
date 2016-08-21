@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 require 'active_support/core_ext/hash/indifferent_access'
 
@@ -62,12 +63,12 @@ module MiddlemanDato
         end
 
         context 'else' do
-          let(:image_obj) { double('MiddlemanDato::FieldType::Image', format: image_format) }
+          let(:image_obj) { double('Dato::Local::FieldType::Image', format: image_format) }
 
-          it 'return the image parsed with MiddlemanDato::FieldType::Image' do
-            allow(MiddlemanDato::FieldType::Image).to receive(:parse).and_return(image_obj)
+          it 'return the image parsed with Dato::Local::FieldType::Image' do
+            allow(Dato::Local::FieldType::Image).to receive(:parse).and_return(image_obj)
             image = meta_tag.image
-            expect(MiddlemanDato::FieldType::Image).to have_received(:parse)
+            expect(Dato::Local::FieldType::Image).to have_received(:parse)
               .with(favicon, nil)
             expect(image).to eq image_obj
           end
@@ -75,7 +76,7 @@ module MiddlemanDato
       end
 
       describe '#url' do
-        let(:image) { instance_double('MiddlemanDato::FieldType::Image', file: file) }
+        let(:image) { instance_double('Dato::Local::FieldType::Image', file: file) }
         let(:file) { instance_double('Imgix::Path') }
         let(:width) { 1 }
         let(:height) { 2 }
@@ -133,7 +134,7 @@ module MiddlemanDato
 
       describe '#build_apple_icon_tags' do
         let(:result) { meta_tag.build_icon_tags }
-        let(:image) { instance_double('MiddlemanDato::FieldType::Image', format: format) }
+        let(:image) { instance_double('Dato::Local::FieldType::Image', format: format) }
         let(:format) { 'png' }
         let(:image_url) { '/path/to/image' }
 
@@ -160,7 +161,7 @@ module MiddlemanDato
 
       describe '#build_application_tags' do
         let(:result) { meta_tag.build_application_tags }
-        let(:image) { instance_double('MiddlemanDato::FieldType::Image', format: format) }
+        let(:image) { instance_double('Dato::Local::FieldType::Image', format: format) }
         let(:format) { 'png' }
         let(:image_url) { '/path/to/image' }
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module MiddlemanDato
   module MetaTags
     class Favicon
@@ -14,7 +15,7 @@ module MiddlemanDato
       end
 
       def image
-        MiddlemanDato::FieldType::Image.parse(favicon, nil) if favicon.present?
+        Dato::Local::FieldType::Image.parse(favicon, nil) if favicon.present?
       end
 
       def url(width, height = nil)
@@ -27,8 +28,7 @@ module MiddlemanDato
           builder.tag(:link,
                       rel: 'apple-touch-icon',
                       sizes: "#{size}x#{size}",
-                      href: url(size)
-                     )
+                      href: url(size))
         end
       end
 
@@ -38,8 +38,7 @@ module MiddlemanDato
                       rel: 'icon',
                       type: "image/#{image.format}",
                       href: url(size),
-                      sizes: "#{size}x#{size}"
-                     )
+                      sizes: "#{size}x#{size}")
         end
       end
 
@@ -47,12 +46,10 @@ module MiddlemanDato
         APPLICATION_SIZES.map do |size|
           builder.tag(:meta,
                       name: "msapplication-square#{size}x#{size}logo",
-                      content: url(size)
-                     )
+                      content: url(size))
         end + [builder.tag(:meta,
                            name: 'msapplication-wide310x150logo',
-                           content: url(310, 150)
-                          )]
+                           content: url(310, 150))]
       end
 
       def main_tags
@@ -61,8 +58,7 @@ module MiddlemanDato
           builder.tag(:meta, name: 'theme-color', content: theme_color),
           builder.tag(:meta,
                       name: 'msapplication-TileColor',
-                      content: theme_color
-                     )
+                      content: theme_color)
         ]
       end
 

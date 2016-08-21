@@ -1,16 +1,16 @@
+# frozen_string_literal: true
 require 'simplecov'
-require 'active_support/dependencies'
-require 'i18n'
-
 SimpleCov.start do
   add_filter '/spec/'
 end
 
-I18n.available_locales = [:it, :en, :ru]
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+puts File.expand_path('../../lib', __FILE__)
 
-ActiveSupport::Dependencies.autoload_paths.unshift(
-  File.join(__dir__, '../lib')
-)
+require 'i18n'
+require 'middleman-dato'
+
+I18n.available_locales = [:it, :en, :ru]
 
 Dir['spec/support/**/*.rb'].each do |f|
   require_relative '../' + f

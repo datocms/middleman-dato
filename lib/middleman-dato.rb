@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 require 'middleman-core'
+require 'middleman_dato/middleman_extension'
 
 Middleman::Extensions.register(:dato) do
-  require 'middleman_dato/middleman_extension'
   MiddlemanDato::MiddlemanExtension
 end
