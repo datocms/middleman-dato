@@ -10,6 +10,12 @@ This gem works for Middleman v3 and v4.
 
 To learn more about DatoCMS and how you can use it with your Middleman website, head over to [our documentation](http://www.datocms.com/docs/) and [video tutorials](http://www.datocms.com/docs/tutorials/middleman_netlify/).
 
+## Example website
+
+We've prepared a [Middleman example website](https://github.com/datocms/middleman-example) integrated with DatoCMS. The site is deployed on Netlify, and can be seen at this URL:
+
+https://datocms-middleman-example.netlify.com/
+
 ## Setup
 
 ```ruby
