@@ -112,6 +112,14 @@ This helper generates meta tags based on the Favicon image specified within the 
 <%= dato_favicon_meta_tags(theme_color: '#D97C5F') %>
 ```
 
+## Disable reload of data at every request
+
+During the development of the website it might be useful to speed up the feedback cycle disabling the automatic reload of DatoCMS data at every page refresh:
+
+```
+DISABLE_DATO_REFRESH=1 bundle exec middleman
+```
+
 ## Submitting a Pull Request
 
 1. Fork it.
