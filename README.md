@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato)
 
-Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS, a fully customizable administrative backend for your static websites. 
+Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS, a fully customizable administrative backend for your static websites.
 
 This gem works for Middleman v3 and v4.
 
@@ -36,11 +36,11 @@ activate :dato,
 
 ### `dato`
 
-Using this helper you can access to any item stored in your site by item type. 
-That is, if your site has an Item Type with `article` as API identifier, you can get 
-the complete array of items with `dato.articles` (yep, the identifier pluralized). 
+Using this helper you can access to any item stored in your site by item type.
+That is, if your site has an Item Type with `article` as API identifier, you can get
+the complete array of items with `dato.articles` (yep, the identifier pluralized).
 
-If a Item Type is marked as Singleton (ie. `about_page`) you don't need to pluralize and 
+If a Item Type is marked as Singleton (ie. `about_page`) you don't need to pluralize and
 a call to `dato.about_page` directly returns the Item (or `nil`, if still hasn't been created
 within the backend).
 
@@ -62,17 +62,19 @@ You can use this helper within Middleman `config.rb`, as well as within your vie
 <% end %>
 ```
 
-Complex field types (ie. images, files, videos, SEO settings, etc.) implement specific methods 
-you can use as well:
+### Managing images and files
+
+Every DatoCMS plan comes with the power of Imgix image processing. Imgix makes
+image processing easy by allowing you to resize, crop, rotate, style, watermark
+images and more easily on-the-fly:
 
 ```ruby
 article = dato.articles.first
-
-article.cover_image.file.width(500).fit('crop').to_url
-article.video.iframe_embed(800, 600)
+article.cover_image.url(w: 200, h: 200, fit: 'crop', fm: 'jpg')
 ```
 
-Please [refer to the code](https://github.com/datocms/middleman-dato/tree/master/lib/middleman_dato/field_type) for more informations.
+To know all the parameters you can pass to the `.url()` method, please take
+a look at the [Imgix Image URL API reference](https://docs.imgix.com/apis/url).
 
 ### `dato_meta_tags`
 
