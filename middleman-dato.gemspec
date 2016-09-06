@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency('middleman-core', ['>= 3.3.12'])
-  s.add_runtime_dependency('dato', ['>= 0.1.16'])
+  s.add_runtime_dependency('dato', ['>= 0.1.18'])
   s.add_runtime_dependency('semantic')
   s.add_runtime_dependency('activesupport')
 end
