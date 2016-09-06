@@ -39,7 +39,11 @@ module MiddlemanDato
     def client
       @client ||= Dato::Site::Client.new(
         options[:token],
-        base_url: options[:api_base_url]
+        base_url: options[:api_base_url],
+        extra_headers: {
+          'X-Reason' => 'dump',
+          'X-SSG' => 'middleman'
+        }
       )
     end
 
