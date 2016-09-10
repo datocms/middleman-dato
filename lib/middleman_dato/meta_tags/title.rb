@@ -17,8 +17,8 @@ module MiddlemanDato
       def title
         @title ||= seo_field_with_fallback(
           :title,
-          item && item.title_attribute &&
-            item.send(item.title_attribute)
+          item && item.title_field_api_key &&
+            item.send(item.title_field_api_key)
         )
       end
 

@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'dato/local/field_type/image'
+
 module MiddlemanDato
   module MetaTags
     class Favicon
