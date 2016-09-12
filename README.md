@@ -1,6 +1,6 @@
-# middleman-dato
+# DatoCMS extension for DatoCMS
 
-[![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato)
+[![Coverage Status](https://coveralls.io/repos/github/datocms/middleman-dato/badge.svg?branch=master)](https://coveralls.io/github/datocms/middleman-dato?branch=master) [![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato) [![Gem Version](https://badge.fury.io/rb/middleman-dato.svg)](https://badge.fury.io/rb/middleman-dato)
 
 Middleman Dato is a Middleman extension to use the Middleman static site generator together with the API-driven DatoCMS, a fully customizable administrative backend for your static websites.
 
@@ -34,11 +34,29 @@ activate :dato,
 
 ## Middleman helpers
 
-### `dato`
+Using this extension you can access to any item stored in your site by item type.
+Let's start with a basic example: in your Middleman `source/index.html.erb` file
+add the following lines:
 
-Using this helper you can access to any item stored in your site by item type.
-That is, if your site has an Item Type with `article` as API identifier, you can get
-the complete array of items with `dato.articles` (yep, the identifier pluralized).
+```erb
+<% dato.item_types.each do |item_type| %>
+  <h1>Items of type "<%= item_type.name %>"</h1>
+  <% dato.items_of_type(item_type).each do |item| %>
+    <pre><%= item.to_hash %></pre>
+  <% end %>
+<% end %>
+```
+
+Run the server with `bundle exec middleman` and you'll see the content of every
+item you created on your DatoCMS site. Awesome!
+
+### Querying items
+
+Beside dumping every content available, this extension makes it easy also to 
+return items belonging to a specific Item Type.
+
+If your site has an Item Type with `article` as API identifier, you can get
+the complete array of items with `dato.articles` — yep, **the API identifier pluralized**.
 
 If a Item Type is marked as Singleton (ie. `about_page`) you don't need to pluralize and
 a call to `dato.about_page` directly returns the Item (or `nil`, if still hasn't been created
@@ -49,7 +67,7 @@ You can query any Item field value with a method called like the field API ident
 If a Item Type has a String field with Title appeareance, than the item responds to `.slug`,
 returning a slugified version of the title itself (or the item identifier, if the title is empty).
 
-You can use this helper within Middleman `config.rb`, as well as within your views:
+You can use these methods in the Middleman `config.rb` file, as well as within your views:
 
 ```ruby
 <% dato.articles.each do |article| %>
