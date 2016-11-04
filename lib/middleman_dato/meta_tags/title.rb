@@ -15,11 +15,17 @@ module MiddlemanDato
       end
 
       def title
-        @title ||= seo_field_with_fallback(
-          :title,
-          item && item.title_field_api_key &&
-            item.send(item.title_field_api_key)
-        )
+        @title ||= begin
+                     title_field = item.fields.find do |field|
+                       field.field_type == 'string' &&
+                         field.appeareance[:type] == 'title'
+                     end
+
+                     seo_field_with_fallback(
+                       :title,
+                       item && title_field && item.send(title_field.api_key)
+                     )
+                   end
       end
 
       def title_with_suffix
