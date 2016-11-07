@@ -6,6 +6,8 @@ require 'dato/site/client'
 require 'dato/local/loader'
 require 'middleman_dato/meta_tags_builder'
 require 'middleman_dato/meta_tags/favicon'
+require 'pusher-client'
+require 'fileutils'
 
 module MiddlemanDato
   class MiddlemanExtension < ::Middleman::Extension
@@ -26,9 +28,19 @@ module MiddlemanDato
       @loader = loader = Dato::Local::Loader.new(client)
       @loader.load
 
-      app.before do
-        loader.load if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
-        true
+      app.after_configuration do
+        Thread.new do
+          PusherClient.logger.level = Logger::WARN
+          socket = PusherClient::Socket.new(
+            '75e6ef0fe5d39f481626',
+            secure: true,
+          )
+          socket.subscribe("site-#{loader.items_repo.site.id}")
+          socket.bind('site:change') do
+            FileUtils.touch('config.rb')
+          end
+          socket.connect
+        end
       end
 
       if Semantic::Version.new(Middleman::VERSION).major <= 3
