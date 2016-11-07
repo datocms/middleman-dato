@@ -6,8 +6,53 @@ require 'dato/site/client'
 require 'dato/local/loader'
 require 'middleman_dato/meta_tags_builder'
 require 'middleman_dato/meta_tags/favicon'
+require 'pusher-client'
 
 module MiddlemanDato
+  class Watcher
+    include Singleton
+    attr_reader :event_queue
+
+    def initialize
+      PusherClient.logger.level = Logger::WARN
+      @site_id = nil
+      @apps = []
+    end
+
+    def watch(app, loader, site_id)
+      @app = app
+      @loader = loader
+
+      if site_id != @site_id
+        if @socket && @socket.connected
+          @apps = []
+          @socket.disconnect
+        end
+
+        @apps = [ app.object_id ]
+        @site_id = site_id
+        @socket = PusherClient::Socket.new('75e6ef0fe5d39f481626', secure: true)
+        @socket.subscribe("site-#{site_id}")
+        @socket.bind('site:change') do
+          print "DatoCMS content changed, refreshing data..."
+          @loader.load
+          puts " done!"
+          @app.sitemap.rebuild_resource_list!(:touched_dato_content)
+        end
+        @socket.connect(true)
+      else
+        @apps[@apps.size - 1] = app.object_id
+      end
+    end
+
+    def shutdown(app)
+      if @socket && @socket.connected && @apps == [ app.object_id ]
+        @socket.disconnect
+      end
+      @apps.delete(app.object_id)
+    end
+  end
+
   class MiddlemanExtension < ::Middleman::Extension
     attr_reader :loader
 
@@ -17,7 +62,8 @@ module MiddlemanDato
     option :base_url, nil, 'Website base URL'
 
     if Semantic::Version.new(Middleman::VERSION).major >= 4
-      expose_to_config dato: :dato
+      expose_to_config dato: :dato_collector
+      expose_to_application dato_items_repo: :items_repo
     end
 
     def initialize(app, options_hash = {}, &block)
@@ -26,9 +72,16 @@ module MiddlemanDato
       @loader = loader = Dato::Local::Loader.new(client)
       @loader.load
 
-      app.before do
-        loader.load if !build? && !ENV.fetch('DISABLE_DATO_REFRESH', false)
-        true
+      app.after_configuration do
+        if !app.build?
+          Watcher.instance.watch(app, loader, loader.items_repo.site.id)
+        end
+      end
+
+      app.before_shutdown do
+        if !app.build?
+          Watcher.instance.shutdown(app)
+        end
       end
 
       if Semantic::Version.new(Middleman::VERSION).major <= 3
@@ -47,7 +100,13 @@ module MiddlemanDato
       )
     end
 
-    def dato
+    def dato_collector
+      app.extensions[:collections].live_collector do |app, resources|
+        app.dato_items_repo
+      end
+    end
+
+    def items_repo
       loader.items_repo
     end
 

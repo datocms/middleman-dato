@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('dato', ['>= 0.1.22'])
   s.add_runtime_dependency('semantic')
   s.add_runtime_dependency('activesupport')
+  s.add_runtime_dependency('pusher-client')
 end
