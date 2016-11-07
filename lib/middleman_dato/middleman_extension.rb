@@ -19,7 +19,8 @@ module MiddlemanDato
     option :base_url, nil, 'Website base URL'
 
     if Semantic::Version.new(Middleman::VERSION).major >= 4
-      expose_to_config dato: :dato
+      expose_to_config dato: :dato_collector
+      expose_to_application dato_items_repo: :items_repo
     end
 
     def initialize(app, options_hash = {}, &block)
@@ -37,7 +38,9 @@ module MiddlemanDato
           )
           socket.subscribe("site-#{loader.items_repo.site.id}")
           socket.bind('site:change') do
-            FileUtils.touch('config.rb')
+            puts "Refresh!"
+            loader.load
+            app.sitemap.rebuild_resource_list!(:touched_dato_content)
           end
           socket.connect
         end
@@ -59,7 +62,13 @@ module MiddlemanDato
       )
     end
 
-    def dato
+    def dato_collector
+      app.extensions[:collections].live_collector do |app, resources|
+        app.dato_items_repo
+      end
+    end
+
+    def items_repo
       loader.items_repo
     end
 
