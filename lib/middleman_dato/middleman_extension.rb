@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require 'middleman-core'
 require 'middleman-core/version'
-require 'semantic'
 require 'dato/site/client'
 require 'dato/local/loader'
 require 'middleman_dato/meta_tags_builder'
@@ -61,10 +60,8 @@ module MiddlemanDato
     option :api_base_url, 'https://site-api.datocms.com', 'Site API host'
     option :base_url, nil, 'Website base URL'
 
-    if Semantic::Version.new(Middleman::VERSION).major >= 4
-      expose_to_config dato: :dato_collector
-      expose_to_application dato_items_repo: :items_repo
-    end
+    expose_to_config dato: :dato_collector
+    expose_to_application dato_items_repo: :items_repo
 
     def initialize(app, options_hash = {}, &block)
       super
@@ -82,10 +79,6 @@ module MiddlemanDato
         if !app.build?
           Watcher.instance.shutdown(app)
         end
-      end
-
-      if Semantic::Version.new(Middleman::VERSION).major <= 3
-        app.send :include, InstanceMethods
       end
     end
 

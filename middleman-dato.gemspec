@@ -22,9 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('coveralls')
 
-  s.add_runtime_dependency('middleman-core', ['>= 3.3.12'])
-  s.add_runtime_dependency('dato', ['>= 0.1.22'])
-  s.add_runtime_dependency('semantic')
+  s.add_runtime_dependency('middleman-core', ['>= 4.1.10'])
+  s.add_runtime_dependency('dato', ['>= 0.2.4'])
   s.add_runtime_dependency('activesupport')
   s.add_runtime_dependency('pusher-client')
 end
