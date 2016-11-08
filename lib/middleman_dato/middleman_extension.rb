@@ -6,6 +6,7 @@ require 'dato/local/loader'
 require 'middleman_dato/meta_tags_builder'
 require 'middleman_dato/meta_tags/favicon'
 require 'pusher-client'
+require 'singleton'
 
 module MiddlemanDato
   class Watcher
