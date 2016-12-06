@@ -124,6 +124,13 @@ This helper takes any item with a SEO field and generates SEO, Facebook OpenGrap
 <link rel="canonical" href="..."/>
 ```
 
+You can also manually access your site's global settings, including global SEO, like so:
+
+    dato.site.global_seo
+    dato.site.favicon
+    dato.site.name
+    dato.site.locales
+
 ### `dato_favicon_meta_tags`
 
 This helper generates meta tags based on the Favicon image specified within the Site:
