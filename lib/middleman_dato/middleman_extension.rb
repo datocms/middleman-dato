@@ -3,63 +3,21 @@ require 'middleman-core'
 require 'middleman-core/version'
 require 'dato/site/client'
 require 'dato/local/loader'
-require 'middleman_dato/meta_tags_builder'
-require 'middleman_dato/meta_tags/favicon'
-require 'pusher-client'
-require 'singleton'
+require 'dato/watch/site_change_watcher'
+require 'middleman_dato/watcher'
+require 'dato/utils/seo_tags_builder'
+require 'dato/utils/favicon_tags_builder'
 
 module MiddlemanDato
-  class Watcher
-    include Singleton
-    attr_reader :event_queue
-
-    def initialize
-      PusherClient.logger.level = Logger::WARN
-      @site_id = nil
-      @apps = []
-    end
-
-    def watch(app, loader, site_id)
-      @app = app
-      @loader = loader
-
-      if site_id != @site_id
-        if @socket && @socket.connected
-          @apps = []
-          @socket.disconnect
-        end
-
-        @apps = [ app.object_id ]
-        @site_id = site_id
-        @socket = PusherClient::Socket.new('75e6ef0fe5d39f481626', secure: true)
-        @socket.subscribe("site-#{site_id}")
-        @socket.bind('site:change') do
-          print "DatoCMS content changed, refreshing data..."
-          @loader.load
-          puts " done!"
-          @app.sitemap.rebuild_resource_list!(:touched_dato_content)
-        end
-        @socket.connect(true)
-      else
-        @apps[@apps.size - 1] = app.object_id
-      end
-    end
-
-    def shutdown(app)
-      if @socket && @socket.connected && @apps == [ app.object_id ]
-        @socket.disconnect
-      end
-      @apps.delete(app.object_id)
-    end
-  end
-
   class MiddlemanExtension < ::Middleman::Extension
     attr_reader :loader
 
-    option :domain, nil, 'Site domain (legacy)'
-    option :token, nil, 'Site API token'
+    option :token, ENV['DATO_API_TOKEN'], 'Site API token'
     option :api_base_url, 'https://site-api.datocms.com', 'Site API host'
-    option :base_url, nil, 'Website base URL'
+    option :live_reload, true, 'Live reload of content coming from DatoCMS'
+
+    option :base_url, nil, 'Website base URL (deprecated)'
+    option :domain, nil, 'Site domain (deprecated)'
 
     expose_to_config dato: :dato_collector
     expose_to_application dato_items_repo: :items_repo
@@ -71,13 +29,13 @@ module MiddlemanDato
       @loader.load
 
       app.after_configuration do
-        if !app.build?
+        if options[:live_reload] && !app.build?
           Watcher.instance.watch(app, loader, loader.items_repo.site.id)
         end
       end
 
       app.before_shutdown do
-        if !app.build?
+        if options[:live_reload] && !app.build?
           Watcher.instance.shutdown(app)
         end
       end
@@ -106,45 +64,40 @@ module MiddlemanDato
 
     module InstanceMethods
       def dato
-        extensions[:dato].loader.items_repo
+        extensions[:dato].items_repo
       end
     end
 
     helpers do
       def dato
-        extensions[:dato].loader.items_repo
+        extensions[:dato].items_repo
       end
 
       def dato_meta_tags(item)
-        site_entity = extensions[:dato].loader
-          .entities_repo
-          .find_entities_of_type('site')
-          .first
+        meta_tags = Dato::Utils::SeoTagsBuilder.new(item, dato.site).meta_tags
 
-        builder = MetaTagsBuilder.new(
-          self,
-          extensions[:dato].options[:base_url],
-          site_entity,
-          item
-        )
-        builder.meta_tags
+        meta_tags.map do |data|
+          if data[:content]
+            content_tag(data[:tag_name], data[:content], data[:attributes])
+          else
+            tag(data[:tag_name], data[:attributes])
+          end
+        end.join
       end
 
       def dato_favicon_meta_tags(options = {})
-        site_entity = extensions[:dato].loader
-          .entities_repo
-          .find_entities_of_type('site')
-          .first
-
-        options[:theme_color] ||= '#ffffff'
-        options[:app_name] ||= ''
-
-        favicon_builder = MetaTags::Favicon.new(
-          self,
-          site_entity,
+        meta_tags = Dato::Utils::FaviconTagsBuilder.new(
+          dato.site,
           options[:theme_color]
         )
-        favicon_builder.build
+
+        meta_tags.map do |data|
+          if data[:content]
+            content_tag(data[:tag_name], data[:content], data[:attributes])
+          else
+            tag(data[:tag_name], data[:attributes])
+          end
+        end.join
       end
     end
   end
