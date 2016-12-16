@@ -29,13 +29,13 @@ module MiddlemanDato
       @loader.load
 
       app.after_configuration do
-        if options[:live_reload] && !app.build?
+        if options_hash[:live_reload] && !app.build?
           Watcher.instance.watch(app, loader, loader.items_repo.site.id)
         end
       end
 
       app.before_shutdown do
-        if options[:live_reload] && !app.build?
+        if options_hash[:live_reload] && !app.build?
           Watcher.instance.shutdown(app)
         end
       end
@@ -89,7 +89,7 @@ module MiddlemanDato
         meta_tags = Dato::Utils::FaviconTagsBuilder.new(
           dato.site,
           options[:theme_color]
-        )
+        ).meta_tags
 
         meta_tags.map do |data|
           if data[:content]
