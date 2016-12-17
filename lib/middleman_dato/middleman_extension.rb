@@ -7,6 +7,7 @@ require 'dato/watch/site_change_watcher'
 require 'middleman_dato/watcher'
 require 'dato/utils/seo_tags_builder'
 require 'dato/utils/favicon_tags_builder'
+require 'dotenv'
 
 module MiddlemanDato
   class MiddlemanExtension < ::Middleman::Extension
@@ -42,8 +43,14 @@ module MiddlemanDato
     end
 
     def client
+      token = options[:token]
+
+      if token.blank? && File.exist?('.env')
+        Dotenv::Environment.new('.env')['DATO_API_TOKEN']
+      end
+
       @client ||= Dato::Site::Client.new(
-        options[:token],
+        token,
         base_url: options[:api_base_url],
         extra_headers: {
           'X-Reason' => 'dump',
