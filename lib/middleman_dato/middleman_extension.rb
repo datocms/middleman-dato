@@ -46,7 +46,11 @@ module MiddlemanDato
       token = options[:token]
 
       if token.blank? && File.exist?('.env')
-        Dotenv::Environment.new('.env')['DATO_API_TOKEN']
+        token = Dotenv::Environment.new('.env')['DATO_API_TOKEN']
+      end
+
+      if token.blank?
+        raise RuntimeError, 'Missing DatoCMS site API token!'
       end
 
       @client ||= Dato::Site::Client.new(
