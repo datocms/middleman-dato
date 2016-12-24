@@ -22,8 +22,7 @@ https://datocms-middleman-example.netlify.com/
 # config.rb
 
 activate :dato,
-  token: 'SITE_READ_ONLY_TOKEN',
-  base_url: 'http://www.mywebsite.com'
+  token: 'SITE_READ_ONLY_TOKEN'
 
 # feel free to use dato from now on:
 #
