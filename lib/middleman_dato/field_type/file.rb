@@ -21,7 +21,7 @@ module MiddlemanDato
 
       def file
         Imgix::Client.new(
-          host: 'dato-images.imgix.net',
+          host: 'www.datocms-assets.com',
           secure: true
         ).path(path)
       end
