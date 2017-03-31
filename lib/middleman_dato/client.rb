@@ -51,7 +51,9 @@ module MiddlemanDato
         headers: {
           'Content-Type' => 'application/json',
           'Accept' => 'application/json',
-          'Authorization' => "Api-Key #{@token}"
+          'Authorization' => "Api-Key #{@token}",
+          'X-Reason' => 'dump',
+          'X-SSG' => 'middleman'
         }
       }
       @connection ||= Faraday.new(options) do |c|
