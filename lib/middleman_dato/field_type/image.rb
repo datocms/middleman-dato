@@ -22,7 +22,7 @@ module MiddlemanDato
       end
 
       def file
-        super.ch('DPR', 'Width').auto('compress', 'format')
+        super.ch('DPR', 'Width').auto('compress')
       end
     end
   end
