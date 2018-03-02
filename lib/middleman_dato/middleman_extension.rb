@@ -16,6 +16,7 @@ module MiddlemanDato
     option :token, ENV['DATO_API_TOKEN'], 'Site API token'
     option :api_base_url, 'https://site-api.datocms.com', 'Site API host'
     option :live_reload, true, 'Live reload of content coming from DatoCMS'
+    option :draft_mode, false, 'Show draft (unpublished) versions of your content'
 
     option :base_url, nil, 'Website base URL (deprecated)'
     option :domain, nil, 'Site domain (deprecated)'
@@ -26,7 +27,11 @@ module MiddlemanDato
     def initialize(app, options_hash = {}, &block)
       super
 
-      @loader = loader = Dato::Local::Loader.new(client)
+      @loader = loader = Dato::Local::Loader.new(
+        client,
+        options_hash[:draft_mode]
+      )
+
       @loader.load
 
       app.after_configuration do
