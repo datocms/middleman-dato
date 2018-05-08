@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'middleman-core', ['>= 4.1.10']
   s.add_runtime_dependency 'dato', ['>= 0.3.2']
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'dotenv'
+  s.add_runtime_dependency 'dotenv', ['<= 2.1']
 end
