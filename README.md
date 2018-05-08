@@ -1,4 +1,4 @@
-# DatoCMS extension for DatoCMS
+# DatoCMS extension for Middleman
 
 [![Coverage Status](https://coveralls.io/repos/github/datocms/middleman-dato/badge.svg?branch=master)](https://coveralls.io/github/datocms/middleman-dato?branch=master) [![Build Status](https://travis-ci.org/datocms/middleman-dato.svg?branch=master)](https://travis-ci.org/datocms/middleman-dato) [![Gem Version](https://badge.fury.io/rb/middleman-dato.svg)](https://badge.fury.io/rb/middleman-dato)
 
