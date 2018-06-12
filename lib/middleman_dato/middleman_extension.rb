@@ -27,6 +27,8 @@ module MiddlemanDato
     def initialize(app, options_hash = {}, &block)
       super
 
+      return if app.mode?(:config)
+
       @loader = loader = Dato::Local::Loader.new(
         client,
         options_hash[:preview]
