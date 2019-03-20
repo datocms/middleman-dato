@@ -1,10 +1,9 @@
 # frozen_string_literal: true
+
 require 'middleman-core'
 require 'middleman-core/version'
 require 'dato/site/client'
 require 'dato/local/loader'
-require 'dato/watch/site_change_watcher'
-require 'middleman_dato/watcher'
 require 'dato/utils/seo_tags_builder'
 require 'dato/utils/favicon_tags_builder'
 require 'dotenv'
@@ -34,17 +33,14 @@ module MiddlemanDato
         options_hash[:preview]
       )
 
-      @loader.load
+      loader.load
 
       app.after_configuration do
         if options_hash[:live_reload] && !app.build?
-          Watcher.instance.watch(app, loader, loader.items_repo.site.id)
-        end
-      end
-
-      app.before_shutdown do
-        if options_hash[:live_reload] && !app.build?
-          Watcher.instance.shutdown(app)
+          loader.watch do
+            puts "DatoCMS content changed!"
+            app.sitemap.rebuild_resource_list!(:touched_dato_content)
+          end
         end
       end
     end
