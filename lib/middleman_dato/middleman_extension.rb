@@ -12,10 +12,11 @@ module MiddlemanDato
   class MiddlemanExtension < ::Middleman::Extension
     attr_reader :loader
 
-    option :token, ENV['DATO_API_TOKEN'], 'Site API token'
-    option :api_base_url, 'https://site-api.datocms.com', 'Site API host'
+    option :token, ENV['DATO_API_TOKEN'], 'Project API token'
+    option :api_base_url, 'https://site-api.datocms.com', 'API Base URL'
     option :live_reload, true, 'Live reload of content coming from DatoCMS'
     option :preview, false, 'Show latest (unpublished) version of your content'
+    option :environment, nil, 'Environment to fetch data from'
 
     option :base_url, nil, 'Website base URL (deprecated)'
     option :domain, nil, 'Site domain (deprecated)'
@@ -59,6 +60,7 @@ module MiddlemanDato
       @client ||= Dato::Site::Client.new(
         token,
         base_url: options[:api_base_url],
+        environment: options[:environment],
         extra_headers: {
           'X-Reason' => 'dump',
           'X-SSG' => 'middleman'
