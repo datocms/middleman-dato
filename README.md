@@ -8,7 +8,7 @@ This gem works for Middleman v4.
 
 ## Documentation
 
-To learn more about DatoCMS and how you can use it with your Middleman website, head over to [our complete documentation](https://docs.datocms.com/middleman/overview.html).
+To learn more about DatoCMS and how you can use it with your Middleman website, head over to [our complete documentation](https://www.datocms.com/docs/middleman).
 
 ## Submitting a Pull Request
 
